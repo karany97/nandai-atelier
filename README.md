@@ -538,11 +538,32 @@ Built on the shoulders of:
 And the entire local-first AI community whose tooling makes the local
 path feasible.
 
+## Repository tour
+
+Every section of the project, linked once:
+
+| Where | What | Why |
+|---|---|---|
+| [`bundle.html`](./bundle.html) | The shipped product (540 KB self-contained) | This IS the chat. Download, serve, point at any OpenAI-shape gateway. |
+| [`src/`](./src/) | TypeScript source (3,800 LOC across 27 files) | What gets minified into bundle.html. Edit + `pnpm run bundle`. |
+| [`journal/`](./journal/) | 18-tick build chronicle | Read this back-to-back for the best feel of how the artifact composes. |
+| [`docs/screenshots/`](./docs/screenshots/) | 20+ proof-of-life captures | Every screenshot backs a HANDOFF tick + a README section. |
+| [`docs/auth-proxy.md`](./docs/auth-proxy.md) | Same-origin auth-proxy spec | How the bundle ships zero secrets — full threat model + fallback. |
+| [`docs/verification/`](./docs/verification/) | PR evidence pattern | Every PR drops a `pr-NNNN-<slug>/` directory with before/after evidence. |
+| [`demos/`](./demos/) | Playwright recipes for browser demo capture | Reproducible video / GIF generation. The basis for the daily-cadence content. |
+| [`scripts/deploy-atelier.sh`](./scripts/deploy-atelier.sh) | Operator deploy (sed-injects defaults) | One-command bake + rsync from `.env` |
+| [`scripts/apply-litellm-proxy.sh`](./scripts/apply-litellm-proxy.sh) | One-command auth-proxy install | Patches mythos-gate, restarts, smoke-tests |
+| [`marketing/`](./marketing/) | Pre-staged Show HN + X thread + checklist | Launch drafts (Sunday 9am Pacific window) per the viral playbook |
+| [`ROADMAP.md`](./ROADMAP.md) | What's coming in v0.2, v0.3, v0.4 | Public commitments, not vapor |
+| [`CONTRIBUTING.md`](./CONTRIBUTING.md) | Discipline (PR template, evidence, code style) | The single-file constraint + no-runtime-deps rule |
+| [`CHANGELOG.md`](#) | Per-release notes | (Lands with v0.2 cut.) |
+| [`LICENSE`](./LICENSE) | MIT | Fork it, white-label it, ship it. |
+
 ## Contributing
 
 PRs welcome. Read [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the test +
 verification discipline (every PR needs an evidence file in
-`docs/verification/`).
+[`docs/verification/`](./docs/verification/)).
 
 ## License
 
