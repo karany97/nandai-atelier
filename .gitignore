@@ -35,3 +35,12 @@ node_modules/
 .env
 .env.local
 src/lib/defaults.local.ts
+
+# Launch / strategic content — lives in a PRIVATE location (e.g.
+# ~/NandaiJarvis/internal-staging/marketing/), NEVER in the public repo.
+# Show HN drafts, pre-launch checklists, internal cadence, unpublished
+# X threads — all of these reveal pre-announcement strategy and damage
+# the launch if visible. Hard guard so no one re-commits this by mistake.
+marketing/
+launch/
+strategy/

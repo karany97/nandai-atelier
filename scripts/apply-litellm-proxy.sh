@@ -205,10 +205,10 @@ src = open(UNIT).read()
 
 block = """
 # Auth-proxy mode (NEW 2026-05-16) — same-origin /api/llm/* proxy
-Environment=LITELLM_INTERNAL=http://127.0.0.1:8008
-Environment=LITELLM_MASTER_KEY=sk-1234
-Environment=LITELLM_PROXY_PATH=/api/llm
-Environment=LITELLM_ALLOWED_ORIGIN=https://atelier.nandai.org
+Environment=LITELLM_INTERNAL=${LITELLM_INTERNAL:-http://127.0.0.1:8008}
+Environment=LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY:-sk-replace-with-your-litellm-master-key}
+Environment=LITELLM_PROXY_PATH=${LITELLM_PROXY_PATH:-/api/llm}
+Environment=LITELLM_ALLOWED_ORIGIN=${LITELLM_ALLOWED_ORIGIN:-https://atelier.example.com}
 """
 # Insert before the ExecStart line
 src = src.replace("ExecStart=", block + "\nExecStart=", 1)
@@ -231,10 +231,19 @@ fi
 echo "[4/5] mythos-gate-atelier active"
 
 # ─── 5. Smoke-test ─────────────────────────────────────────────────────────
-# Forge a valid gate cookie (HMAC-SHA256 over a future timestamp)
-COOKIE=$(python3 -c '
-import hmac, hashlib, time
-secret = b"***REDACTED-rotated-2026-05-16***"
+# Forge a valid gate cookie (HMAC-SHA256 over a future timestamp).
+# Pulls the actual secret from systemd at smoke-test time (NEVER bake it
+# into a committable script — secrets in git history are a permanent leak).
+SECRET=$(sudo systemctl show mythos-gate-atelier.service -p Environment | tr ' ' '\n' | grep '^MYTHOS_GATE_SECRET=' | cut -d= -f2-)
+if [ -z "$SECRET" ]; then
+  echo "WARN: could not read MYTHOS_GATE_SECRET from systemd; skipping cookie smoke-test"
+  exit 0
+fi
+ORIGIN=$(sudo systemctl show mythos-gate-atelier.service -p Environment | tr ' ' '\n' | grep '^LITELLM_ALLOWED_ORIGIN=' | cut -d= -f2-)
+
+COOKIE=$(SECRET="$SECRET" python3 -c '
+import hmac, hashlib, os, time
+secret = os.environ["SECRET"].encode()
 value = str(int(time.time()) + 3600)
 sig = hmac.new(secret, value.encode(), hashlib.sha256).hexdigest()
 print(value + "." + sig)
@@ -242,7 +251,7 @@ print(value + "." + sig)
 
 HTTP=$(curl -s -o /tmp/proxy-smoketest.json -w "%{http_code}" \
   -H "Cookie: mythos-atelier=$COOKIE" \
-  -H "Origin: https://atelier.nandai.org" \
+  -H "Origin: ${ORIGIN:-https://atelier.example.com}" \
   http://127.0.0.1:3058/api/llm/v1/models)
 
 if [ "$HTTP" = "200" ]; then

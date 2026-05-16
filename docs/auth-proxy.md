@@ -82,7 +82,7 @@ Forge a valid gate cookie with the same secret as systemd:
 ```bash
 COOKIE=$(python3 -c '
 import hmac, hashlib, time
-secret = b"***REDACTED-rotated-2026-05-16***"   # match LITELLM_*-secret env
+secret = b"<your-MYTHOS_GATE_SECRET-here>"   # match the systemd env on your gate
 value = str(int(time.time()) + 3600)
 sig = hmac.new(secret, value.encode(), hashlib.sha256).hexdigest()
 print(value + "." + sig)
