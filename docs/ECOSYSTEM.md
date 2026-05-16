@@ -71,11 +71,28 @@ In a chat app, the AI answers questions. In our ecosystem, the AI:
 | Repo | What | Status |
 |------|------|--------|
 | [karany97/nandai-atelier](https://github.com/karany97/nandai-atelier) | This. The chat surface. | shipped |
-| [karany97/destiny-computer](https://github.com/karany97/destiny-computer) | KasmVNC + Anthropic Computer Use driver | v0.2 shipped |
+| [karany97/destiny-computer](https://github.com/karany97/destiny-computer) | KasmVNC + Anthropic Computer Use driver (single-desktop) | v0.2 shipped |
+| `karany97/atelier-os` | **Multi-session** Sway/Wayland fleet — one desktop per teammate, swappable open-weights model ([Holo3-35B-A3B](https://huggingface.co/HCompany/Holo3-35B-A3B) default), iframe-embeddable | v0.1.1 — repo opens this week |
 | [karany97/tooltalk](https://github.com/karany97/tooltalk) | Translator: Gemma 4 text-format → OpenAI tool_calls | v0.1 |
 | [karany97/moa-router](https://github.com/karany97/moa-router) | Self-MoA aggregator (ICLR 2025) | v0.1 |
 | [karany97/pingate](https://github.com/karany97/pingate) | The simplest signed-cookie PIN gate | v0.1 |
 | [karany97/llamacpp-gemma4-mtp](https://github.com/karany97/llamacpp-gemma4-mtp) | llama.cpp patches for Gemma-4 + MTP speculation | v0.1 |
+
+### destiny-computer vs atelier-os
+
+These are related but different. The short version:
+
+- **destiny-computer** is *one* persistent Linux desktop (KasmVNC + X11 +
+  Anthropic Computer Use). Perfect for "I want my AI to have a body and
+  the demo to be small enough to read." `docker compose up` and you
+  have one teammate.
+- **atelier-os** is *N* desktops as a fleet (Sway/Wayland + Selkies WebRTC +
+  Anthropic OR self-hosted Holo3-35B-A3B). Persistent `/home/operator`
+  per session. Iframe-embed any session in any chat surface. Built
+  for the "every employee has their own AI" pattern.
+
+You can run either independently. Atelier wires up to both via the same
+`/api/computer/*` shape — pick the one that matches the scale you need.
 
 Killer features in flight (spec-only, not yet shipped):
 - **nandai-network-agent** — discovers your LAN + Tailscale, adopts SSH
@@ -84,17 +101,33 @@ Killer features in flight (spec-only, not yet shipped):
 - **Headless theme system** — multiple themes ship in the bundle,
   selected per-URL / per-cookie, no rebuild. Serve N brands off one
   deploy.
+- **atelier-os snapshot/restore** — `docker commit` + `tar` the
+  per-session `/home/operator` to seed new teammates from a "trained"
+  baseline. Spec exists; API in v0.2.
 
 ## Per-employee desktops
 
-We currently run 5 KasmVNC containers (one per team member at Nandai).
+Two flavors, your choice:
+
+**Single desktop (destiny-computer)** — one KasmVNC container, one
+Anthropic Computer Use driver. Read the entire codebase in an
+afternoon. Best for "I want the smallest possible 'AI with a body'
+demo."
+
+**Multi-session fleet (atelier-os)** — N Sway+Selkies WebRTC
+containers, one per teammate, all behind one FastAPI fleet
+(`/sessions`, `/sessions/{id}/task`, SSE step stream). Swappable
+backend per session — Anthropic for production quality, Holo3-35B-A3B
+(Apache 2.0, OSWorld-Verified 77.8%) for $0/inference self-hosted.
 Each container persists `/home/operator/` across restarts so the AI's
 work survives reboots (browser tabs, downloaded files, ssh keys it
 generated, partial scripts it was writing).
 
-The atelier instance for each employee can be configured to route to
-their personal KasmVNC + driver. Multi-tenant atelier is on the
-roadmap — for now, each employee runs their own atelier bookmark.
+We run **atelier-os** internally at Nandai (5 sessions: Janvi /
+Devika / Aayush / Priya / shared-ops). The atelier instance for each
+employee `iframes` their session's WebRTC stream into a right pane
+next to the chat. Multi-tenant atelier (one chat surface, many
+employees) is on the roadmap.
 
 ## Data discipline
 
