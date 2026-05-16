@@ -879,6 +879,12 @@ async function runLiveCompletion(convId: string, opts: { forceTools?: boolean; r
         } else if (d.kind === 'tool_call_delta') {
           flushNow();
           patchAssistant(convId, asstId, { status: 'tool-calling', statusNote: d.name });
+        } else if (d.kind === 'status') {
+          // B12 wire-through: streamChat fires a status delta after 8s
+          // of zero bytes (CF flake or upstream slow). Surface it on the
+          // existing StatusBadge so the user sees something instead of a
+          // silent "thinking" hang.
+          patchAssistant(convId, asstId, { statusNote: d.status });
         } else if (d.kind === 'usage') {
           patchAssistant(convId, asstId, {
             tokens: { prompt: d.usage.prompt_tokens, completion: d.usage.completion_tokens },

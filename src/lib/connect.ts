@@ -72,9 +72,18 @@ const BAKED_BASE_URL  = '__BAKED_BASE_URL__';   // deploy.sh: NANDAI_LITELLM_URL
 const BAKED_API_KEY   = '__BAKED_API_KEY__';    // deploy.sh: NANDAI_LITELLM_KEY
 const BAKED_TOOLS_URL = '__BAKED_TOOLS_URL__';  // deploy.sh: NANDAI_TOOLS_URL
 
-/** If the sentinel is still present (no operator-bake happened), treat as empty. */
+/** If the sentinel is still present (no operator-bake happened), treat as empty.
+ *
+ *  B9 fix: build the comparison prefix from a character array at runtime so
+ *  the minifier doesn't emit the literal `'__BAKED_'` string in the bundle.
+ *  Previously the literal survived alongside the sentinel constants, and the
+ *  deploy script's sed would have replaced both if any operator-baked value
+ *  ever contained the substring `__BAKED_` (a real risk, even if remote).
+ *  Array.join('') is reliably NOT constant-folded by Vite's esbuild minifier
+ *  as of esbuild 0.21+. */
 function unbake(s: string): string {
-  return s.startsWith('__BAKED_') ? '' : s;
+  const SENTINEL_PREFIX = ['_', '_', 'B', 'A', 'K', 'E', 'D', '_'].join('');
+  return s.startsWith(SENTINEL_PREFIX) ? '' : s;
 }
 
 const DEFAULT: Connection = {
