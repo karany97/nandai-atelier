@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  X, Sliders, Cpu, ShieldCheck, Sparkles, Eye, EyeOff, Sun, Moon, Globe2, Loader2, CheckCircle2, AlertCircle, Power, Cloud, Link2,
+  X, Sliders, Cpu, ShieldCheck, Sparkles, Eye, EyeOff, Sun, Moon, Globe2, Loader2, CheckCircle2, AlertCircle, Power, Cloud, Link2, Monitor,
   Download, Upload, Trash2,
 } from 'lucide-react';
 import {
@@ -12,6 +12,7 @@ import {
 import { getStorageStats } from '../lib/persist';
 import type { BrainKey } from '../lib/types';
 import { BRAIN_META, UNDERLYING_META } from '../lib/types';
+import { loadComputerConfig, saveComputerConfig, type ComputerConfig } from './ComputerPane';
 
 export function SettingsDrawer() {
   const open = useStore((s) => s.settingsOpen);
@@ -20,6 +21,18 @@ export function SettingsDrawer() {
   const connStatus = useStore((s) => s.connectStatus);
   const bridgeStatus = useStore((s) => s.bridgeStatus);
   const [revealKey, setRevealKey] = useState(false);
+  // Destiny Computer config — separate from main `conn` state because it
+  // lives in its own localStorage key and the chat pane reads it
+  // independently of the LiteLLM connection.
+  const [computer, setComputer] = useState<ComputerConfig>(() => loadComputerConfig());
+  useEffect(() => {
+    if (open) setComputer(loadComputerConfig());
+  }, [open]);
+  const updateComputer = (patch: Partial<ComputerConfig>) => {
+    const next = { ...computer, ...patch };
+    setComputer(next);
+    saveComputerConfig(next);
+  };
 
   // D-A11Y-007: trap focus inside the drawer; restore on close
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -192,6 +205,44 @@ export function SettingsDrawer() {
                     {bridgeStatus.kind === 'probing' ? <Loader2 size={13} className="animate-spin" /> : <Link2 size={13} />}
                     Test bridge
                   </button>
+                </div>
+              </Section>
+
+              {/* ─── 3.5 Destiny Computer (live desktop pane) ─── */}
+              <Section title="Computer — live desktop pane" icon={<Monitor size={13} className="text-[color:hsl(var(--accent-1))]" />}>
+                <LField label="KasmVNC / noVNC URL">
+                  <input
+                    value={computer.url}
+                    onChange={(e) => updateComputer({ url: e.target.value })}
+                    placeholder="https://pc-you.your-domain.com/"
+                    className="w-full rounded-md border border-border bg-card px-3 py-2 text-[13px] font-mono outline-none focus:border-foreground/25"
+                  />
+                  <div className="text-[10.5px] text-muted-foreground mt-1">
+                    Embedded as a sandboxed iframe on the right side. Toggle with{' '}
+                    <kbd className="font-mono">⌘\</kbd>. See <a
+                      href="https://github.com/karany97/destiny-computer"
+                      className="underline hover:no-underline"
+                      target="_blank" rel="noreferrer noopener">
+                      destiny-computer
+                    </a> for the Docker compose that spins one up.
+                  </div>
+                </LField>
+                <LField label="Label (shown above the pane)">
+                  <input
+                    value={computer.label}
+                    onChange={(e) => updateComputer({ label: e.target.value })}
+                    placeholder="Computer"
+                    className="w-full rounded-md border border-border bg-card px-3 py-2 text-[13px] outline-none focus:border-foreground/25"
+                  />
+                </LField>
+                <Toggle label="Open automatically on chat load" icon={<Monitor size={12} />}
+                  value={computer.autoOpen}
+                  onChange={(v) => updateComputer({ autoOpen: v })} />
+                <div className="text-[10.5px] text-muted-foreground -mt-1">
+                  The iframe is sandboxed (allow-scripts allow-same-origin allow-forms
+                  allow-popups allow-pointer-lock allow-modals) and ships with{' '}
+                  <span className="font-mono">referrerpolicy="no-referrer"</span> so
+                  the chat URL doesn't leak to the desktop host.
                 </div>
               </Section>
 
