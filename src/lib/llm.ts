@@ -71,11 +71,30 @@ export type LiveLLMConfig = {
 
 // ─── /v1/models ─────────────────────────────────────────────────────────────
 
+/** Same-origin endpoints (paths starting with `/`) authenticate via cookies;
+ *  cross-origin endpoints (https://) authenticate via the apiKey Bearer. */
+function isSameOriginPath(baseUrl: string): boolean {
+  return baseUrl.startsWith('/');
+}
+
+function authHeaders(cfg: LiveLLMConfig): Record<string, string> {
+  return isSameOriginPath(cfg.baseUrl)
+    ? {}                                                  // cookies + server-side master-key injection
+    : { Authorization: `Bearer ${cfg.apiKey}` };
+}
+
+function fetchInit(cfg: LiveLLMConfig): Partial<RequestInit> {
+  return isSameOriginPath(cfg.baseUrl)
+    ? { credentials: 'include' as const }                 // send the gate cookie
+    : {};
+}
+
 export async function listModels(cfg: LiveLLMConfig): Promise<string[]> {
   const url = `${stripTrailingSlash(cfg.baseUrl)}/v1/models`;
   const res = await fetch(url, {
     method: 'GET',
-    headers: { Authorization: `Bearer ${cfg.apiKey}` },
+    headers: authHeaders(cfg),
+    ...fetchInit(cfg),
   });
   if (!res.ok) throw new Error(`listModels: HTTP ${res.status} ${res.statusText}`);
   const body = await res.json();
@@ -136,11 +155,12 @@ export async function streamChat(opts: StreamOpts): Promise<StreamResult> {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${opts.cfg.apiKey}`,
+        ...authHeaders(opts.cfg),
         Accept: 'text/event-stream',
       },
       body: JSON.stringify(body),
       signal: controller.signal,
+      ...fetchInit(opts.cfg),
     });
   } catch (e: any) {
     clearTimeout(timeout);

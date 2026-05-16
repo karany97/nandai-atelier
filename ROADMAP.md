@@ -32,7 +32,7 @@ Launch blockers + the first round of post-launch polish.
 
 | Status | Item | Notes |
 |---|---|---|
-| 🚧 | Auth proxy (`packages/atelier-auth-proxy`) | PIN gate + signed-cookie SSO — required before any public deploy |
+| ✅ | Auth proxy (`scripts/apply-litellm-proxy.sh`) | Same-origin `/api/llm/*` route in mythos-gate-atelier; master key injected server-side, bundle ships zero secrets. See [docs/auth-proxy.md](./docs/auth-proxy.md). |
 | 🚧 | BFCL v3 self-run for ToolACE-2-8B | Replace the "91.4% from paper" line with our own number |
 | 📋 | Playwright E2E suite (15 specs) | Snapshot tests for sidebar, composer, settings, tool-loop, Sentinel verdict, cross-tab sync |
 | 📋 | Bench harness (`/bench/`) | Reproducible GAIA L1+L2, SWE-bench Verified Lite, τ²-bench runs |

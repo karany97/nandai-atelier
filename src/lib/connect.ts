@@ -119,8 +119,19 @@ export function saveConnection(c: Connection): void {
   try { localStorage.setItem(LS_KEY, JSON.stringify(c)); } catch { /* quota */ }
 }
 
+/** Same-origin endpoints (paths starting with `/`) authenticate via cookies
+ *  carried by `credentials: 'include'`, so the apiKey field is optional in
+ *  that mode — the upstream proxy injects the master key server-side. */
+function isSameOriginPath(baseUrl: string): boolean {
+  return baseUrl.startsWith('/');
+}
+
 export async function testConnection(c: Connection): Promise<ConnectStatus> {
-  if (!c.baseUrl || !c.apiKey) return { kind: 'unconfigured' };
+  if (!c.baseUrl) return { kind: 'unconfigured' };
+  // Cookie-auth (relative baseUrl) doesn't need an apiKey — the auth-proxy
+  // injects the master key on the server side. Cross-origin (https://) still
+  // requires a key because the browser won't share cookies cross-origin.
+  if (!isSameOriginPath(c.baseUrl) && !c.apiKey) return { kind: 'unconfigured' };
   const cfg: LiveLLMConfig = { baseUrl: c.baseUrl, apiKey: c.apiKey, timeoutMs: 8_000 };
   try {
     const models = await listModels(cfg);

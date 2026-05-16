@@ -83,15 +83,13 @@ cp "$BUNDLE" "$WORK_BUNDLE"
 # Escape any |, &, \ in URLs/keys for sed safety
 esc() { printf '%s' "$1" | sed -e 's/[\/&|]/\\&/g'; }
 
-if [ -n "$NANDAI_LITELLM_URL" ]; then
-  sed -i.bak "s|__BAKED_BASE_URL__|$(esc "$NANDAI_LITELLM_URL")|g" "$WORK_BUNDLE"
-fi
-if [ -n "$NANDAI_LITELLM_KEY" ]; then
-  sed -i.bak "s|__BAKED_API_KEY__|$(esc "$NANDAI_LITELLM_KEY")|g" "$WORK_BUNDLE"
-fi
-if [ -n "$NANDAI_TOOLS_URL" ]; then
-  sed -i.bak "s|__BAKED_TOOLS_URL__|$(esc "$NANDAI_TOOLS_URL")|g" "$WORK_BUNDLE"
-fi
+# Always sed each sentinel (empty value → empty string). This keeps the
+# sentinel from appearing in the published bundle, which would look like
+# a misconfiguration to anyone reading the source. Empty baseUrl + empty
+# apiKey + relative paths is the valid "same-origin cookie auth" mode.
+sed -i.bak "s|__BAKED_BASE_URL__|$(esc "${NANDAI_LITELLM_URL:-}")|g" "$WORK_BUNDLE"
+sed -i.bak "s|__BAKED_API_KEY__|$(esc "${NANDAI_LITELLM_KEY:-}")|g" "$WORK_BUNDLE"
+sed -i.bak "s|__BAKED_TOOLS_URL__|$(esc "${NANDAI_TOOLS_URL:-}")|g" "$WORK_BUNDLE"
 rm -f "$WORK_BUNDLE.bak"
 
 # ─── 4. Fingerprint ─────────────────────────────────────────────────────────
