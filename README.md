@@ -4,7 +4,7 @@
 
 ### The chat surface of an AI ecosystem you run your business on.<br/>Local. Single file. 108 tools. Bug-free or it doesn't ship.
 
-[![Bundle size](https://img.shields.io/badge/bundle-542%20KB-c2410c)](./bundle.html)
+[![Bundle size](https://img.shields.io/badge/bundle-548%20KB-c2410c)](./bundle.html)
 [![License: MIT](https://img.shields.io/badge/license-MIT-22c55e)](./LICENSE)
 [![Build journal](https://img.shields.io/badge/build%20journal-18%20ticks-eab308)](./journal/)
 [![Live demo](https://img.shields.io/badge/demo-atelier.nandai.org-0f766e)](https://atelier.nandai.org)
@@ -20,7 +20,7 @@ network.** We run our Indian jewelry e-commerce company on it.
 
 ---
 
-Destiny Atelier is one 540 KB HTML file — the chat window. Open it,
+Destiny Atelier is one 548 KB HTML file — the chat window. Open it,
 point it at any OpenAI-shape LLM gateway, and you get a Claude.ai-density
 chat surface where every reasoning answer is **voted on by three local
 models** (a fast 27B, a thinking 36B, and a tool-specialist 8B), audited
@@ -65,7 +65,7 @@ data never leaves your LAN.
 ## Quick links
 
 - **Live demo**: [atelier.nandai.org](https://atelier.nandai.org) *(PIN-gated — ask)*
-- **Bundle**: [`bundle.html`](./bundle.html) — 537 KB, drop into any static server
+- **Bundle**: [`bundle.html`](./bundle.html) — 548 KB, drop into any static server
 - **Architecture**: [see below](#architecture--3-node-topology)
 - **Build journal**: [`journal/`](./journal/) — 18 chronicled ticks
 - **Benchmarks**: [`#benchmarks`](#benchmarks) — *filling in as we submit*
@@ -96,7 +96,7 @@ data never leaves your LAN.
 
 ## What this is
 
-A single 540 KB HTML file that, when served behind a thin auth proxy and an
+A single 548 KB HTML file that, when served behind a thin auth proxy and an
 OpenAI-compatible LLM gateway, gives you:
 
 > **Naming**: this software is **Destiny Atelier**. *Destiny* is the brand under which the
@@ -145,7 +145,7 @@ explainable like a debugger, and 100% mine because it runs on my own GPUs.
 | **Tool access** | Their curated set | All 108 MCP tools, extend any time |
 | **Customization** | None | One file you edit and rebuild |
 | **Self-improvement loop** | Black box | Sentinel verdicts → auto-recover → learn |
-| **Latency p50** | 600–1200 ms TTFT | 380 ms TTFT (Qwen 3.6 fast path) |
+| **Latency p50** | 600–1200 ms TTFT | _[bench TBD — see `bench/`]_ |
 | **Privacy floor** | "We don't train on your data, trust us" | Zero packets leave your subnet |
 | **Operator override** | None | The whole stack is one HTML file |
 
@@ -358,7 +358,7 @@ Point Settings at `http://localhost:8008` and `http://localhost:8051`.
 ```bash
 # One-shot: build, inline, output single bundle.html
 pnpm run bundle
-# → bundle.html (537 KB self-contained)
+# → bundle.html (548 KB self-contained)
 
 # Serve it from anywhere static
 python3 -m http.server --bind 127.0.0.1 3057    # serves bundle.html as index
@@ -452,13 +452,13 @@ documentation of how the pieces compose.
 
 | | Atelier | Open WebUI | LibreChat | Lobe Chat |
 |---|---|---|---|---|
-| Single-file artifact | ✅ 537 KB | ❌ multi-binary | ❌ multi-binary | ❌ multi-binary |
+| Single-file artifact | ✅ 548 KB | ❌ multi-binary | ❌ multi-binary | ❌ multi-binary |
 | Local-first | ✅ | ✅ | ✅ | ✅ |
 | Sub-agent dispatch | 🚧 v0.4 | ❌ | ❌ | ❌ |
 | Multi-model voting | ✅ Self-MoA | ❌ | ❌ | ❌ |
 | 8-axis post-turn audit | ✅ Sentinel | ❌ | ❌ | ❌ |
 | MCP tool support | ✅ 108 servers | ✅ via mcpo | ✅ | ✅ |
-| Bundle size | 537 KB | ~28 MB | ~12 MB | ~9 MB |
+| Bundle size | 548 KB | ~28 MB | ~12 MB | ~9 MB |
 | Operator-grade (one HTML file) | ✅ | ❌ | ❌ | ❌ |
 | Customization surface | edit the file | plugin API | config + plugins | config |
 | License | MIT | MIT | MIT | MIT |
@@ -514,7 +514,7 @@ three-brain voting fires on reasoning / math / multi-step tool tasks
 specifically, where Self-MoA shows a +3.8–6.6% lift in published results.
 
 **Q: Why isn't Atelier an Electron app?**
-A: Because the install size would be 200 MB instead of 537 KB, and the
+A: Because the install size would be 200 MB instead of 548 KB, and the
 operator-edit-and-rebuild loop would be 10× slower. The single-file
 constraint is the architectural feature.
 
@@ -529,9 +529,9 @@ A: Yes. Run `nandai-fast` (Qwen 3.6-27B Q4) and `nandai-think` (Hermes
 4.3-36B Q4) sequentially via `mythos-swap.sh`. `nandai-tool` runs on CPU.
 You give up the concurrency speedup but the chat is fully functional.
 
-**Q: Is `bundle.html` actually 540 KB? That feels small.**
-A: It is. Run `wc -c bundle.html` — confirms `540,434`. React + Tailwind +
-shadcn/ui + framer-motion + lucide-react + ~3,800 lines of app code +
+**Q: Is `bundle.html` actually 548 KB? That feels small.**
+A: It is. Run `wc -c bundle.html` — confirms `561,423` (548 KB). React + Tailwind +
+shadcn/ui + framer-motion + lucide-react + ~7,800 lines of first-party app code +
 the Canvas2D ambient backdrop, inlined and minified. *No Three.js, no
 WebGL libraries — the 3D-feel particle effect is pure Canvas2D so the
 bundle stays operator-grade small.*
@@ -578,8 +578,8 @@ Every section of the project, linked once:
 
 | Where | What | Why |
 |---|---|---|
-| [`bundle.html`](./bundle.html) | The shipped product (540 KB self-contained) | This IS the chat. Download, serve, point at any OpenAI-shape gateway. |
-| [`src/`](./src/) | TypeScript source (3,800 LOC across 27 files) | What gets minified into bundle.html. Edit + `pnpm run bundle`. |
+| [`bundle.html`](./bundle.html) | The shipped product (548 KB self-contained) | This IS the chat. Download, serve, point at any OpenAI-shape gateway. |
+| [`src/`](./src/) | TypeScript source (7,800 LOC across 35 first-party files, plus shadcn/ui) | What gets minified into bundle.html. Edit + `pnpm run bundle`. |
 | [`journal/`](./journal/) | 18-tick build chronicle | Read this back-to-back for the best feel of how the artifact composes. |
 | [`docs/screenshots/`](./docs/screenshots/) | 20+ proof-of-life captures | Every screenshot backs a HANDOFF tick + a README section. |
 | [`docs/auth-proxy.md`](./docs/auth-proxy.md) | Same-origin auth-proxy spec | How the bundle ships zero secrets — full threat model + fallback. |
@@ -613,6 +613,6 @@ verification discipline (every PR needs an evidence file in
 **[Contributing](./CONTRIBUTING.md)**
 
 Built on a Mac M4 Pro. Inference on dual RTX 3090.<br/>
-The chat fits in one 540 KB HTML file. The journal explains why.
+The chat fits in one 548 KB HTML file. The journal explains why.
 
 </div>

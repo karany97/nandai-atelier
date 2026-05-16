@@ -8,7 +8,7 @@
 ## The thing you must read before opening a PR
 
 Destiny Atelier is a **single-file artifact**. Source lives in `src/`, but what ships
-is a 537 KB self-contained `bundle.html`. Two consequences:
+is a 548 KB self-contained `bundle.html`. Two consequences:
 
 1. **No runtime deps allowed.** No CDN scripts, no remote font loads, no
    image hosting outside the bundle. Everything that boots the chat must
@@ -23,7 +23,7 @@ is a 537 KB self-contained `bundle.html`. Two consequences:
 
 PRs without a verification dir get a polite "please add evidence" comment
 and won't be merged. This is the same discipline the build journal enforces
-on every tick — it's why a 537 KB chat ships without surprises.
+on every tick — it's why a 548 KB chat ships without surprises.
 
 ## Development setup
 
@@ -45,7 +45,7 @@ OpenAI-shape gateway. The fastest local path:
 ## Building the artifact
 
 ```bash
-pnpm run bundle    # → dist/ + bundle.html (single-file, ~537 KB)
+pnpm run bundle    # → dist/ + bundle.html (single-file, ~548 KB)
 ```
 
 This is what gets attached to releases and what `scripts/deploy-atelier.sh`

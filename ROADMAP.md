@@ -13,7 +13,7 @@ see in `bundle.html` today.
 
 | Status | Item | Notes |
 |---|---|---|
-| ✅ | Single-file React artifact (537 KB) | One `bundle.html`, no runtime deps |
+| ✅ | Single-file React artifact (548 KB) | One `bundle.html`, no runtime deps |
 | ✅ | OpenAI-shape multi-LLM routing | Any LiteLLM / Ollama / vLLM endpoint |
 | ✅ | Three-brain Trinity (Qwen 3.6-27B + Hermes 4.3-36B + ToolACE-2-8B) | Configurable per-message |
 | ✅ | Opus escape via Claude Code bridge | Auto-escalates on local refusal / short answers |
