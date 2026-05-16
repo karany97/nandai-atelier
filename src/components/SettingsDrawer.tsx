@@ -5,7 +5,7 @@ import {
   Download, Upload, Trash2,
 } from 'lucide-react';
 import {
-  useStore, setSettings as setSettingsOpen, patchSettings, setTheme,
+  useStore, setSettings as setSettingsOpen, patchSettings,
   setConnection, probeConnection, probeBridge,
   clearAllChats, exportAllChats, importChats,
 } from '../lib/store';
@@ -13,6 +13,7 @@ import { getStorageStats } from '../lib/persist';
 import type { BrainKey } from '../lib/types';
 import { BRAIN_META, UNDERLYING_META } from '../lib/types';
 import { loadComputerConfig, saveComputerConfig, type ComputerConfig } from './ComputerPane';
+import { THEMES, resolveTheme, setTheme as setThemeV2, readCustomCss, setCustomCss, type ThemeName } from '../lib/theme';
 
 export function SettingsDrawer() {
   const open = useStore((s) => s.settingsOpen);
@@ -291,18 +292,7 @@ export function SettingsDrawer() {
                   value={settings.showThinking} onChange={(v) => patchSettings({ showThinking: v })} />
                 <Toggle label="Reduce motion (overrides OS preference)" icon={<Sparkles size={12} />}
                   value={settings.reduceMotion} onChange={(v) => patchSettings({ reduceMotion: v })} />
-                <div className="grid grid-cols-2 gap-2 mt-3">
-                  <button onClick={() => setTheme('light')}
-                    className={`rounded-md p-3 text-[12px] text-left border ${settings.theme === 'light' ? 'border-foreground/25 bg-foreground/[0.04]' : 'border-border'}`}>
-                    <div className="flex items-center gap-2"><Sun size={13} /> Light</div>
-                    <div className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground mt-1">Paper</div>
-                  </button>
-                  <button onClick={() => setTheme('dark')}
-                    className={`rounded-md p-3 text-[12px] text-left border ${settings.theme === 'dark' ? 'border-foreground/25 bg-foreground/[0.04]' : 'border-border'}`}>
-                    <div className="flex items-center gap-2"><Moon size={13} /> Dark</div>
-                    <div className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground mt-1">Warm ink</div>
-                  </button>
-                </div>
+                <ThemePicker />
               </Section>
 
               <Section title="Data & privacy" icon={<ShieldCheck size={13} className="text-[color:hsl(var(--accent-1))]" />}>
@@ -677,5 +667,85 @@ function DataButton({ onClick, icon, label, hint, danger }: {
       <div className="flex items-center gap-1.5 text-[12px] font-medium">{icon}{label}</div>
       <div className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground mt-1">{hint}</div>
     </button>
+  );
+}
+
+// ThemePicker — headless theme dropdown + custom CSS textarea.
+// Reads + writes via /lib/theme.ts (cookie + localStorage + DOM). Live —
+// changing the dropdown swaps CSS variables on the document in the same
+// tick, no rebuild, no reload.
+function ThemePicker() {
+  const [active, setActive] = useState<ThemeName>(() => resolveTheme());
+  const [customOpen, setCustomOpen] = useState(active === 'custom');
+  const [customCss, setCustomCssLocal] = useState(() => readCustomCss());
+
+  const choose = (name: ThemeName) => {
+    setActive(name);
+    setThemeV2(name);
+    if (name === 'custom') setCustomOpen(true);
+  };
+
+  return (
+    <div className="mt-3 space-y-2">
+      <label className="block text-[11px] uppercase tracking-[0.12em] text-muted-foreground mb-1">
+        Theme — live swap, no rebuild
+      </label>
+      <div className="grid grid-cols-2 gap-2">
+        {THEMES.map((t) => (
+          <button
+            key={t.name}
+            onClick={() => choose(t.name)}
+            className={`rounded-md p-3 text-[12px] text-left border transition-colors ${
+              active === t.name
+                ? 'border-foreground/30 bg-foreground/[0.05]'
+                : 'border-border hover:border-foreground/15'
+            }`}
+            title={t.description}
+          >
+            <div className="font-medium">{t.label}</div>
+            <div className="text-[10px] text-muted-foreground mt-0.5 line-clamp-2">{t.description}</div>
+          </button>
+        ))}
+        <button
+          onClick={() => choose('custom')}
+          className={`rounded-md p-3 text-[12px] text-left border transition-colors ${
+            active === 'custom'
+              ? 'border-foreground/30 bg-foreground/[0.05]'
+              : 'border-border border-dashed hover:border-foreground/15'
+          }`}
+          title="Paste your own CSS variable block — overrides all others"
+        >
+          <div className="font-medium">Custom</div>
+          <div className="text-[10px] text-muted-foreground mt-0.5 line-clamp-2">Paste your own CSS variable block.</div>
+        </button>
+      </div>
+
+      {(customOpen || active === 'custom') && (
+        <div className="mt-2">
+          <textarea
+            value={customCss}
+            onChange={(e) => {
+              setCustomCssLocal(e.target.value);
+              setCustomCss(e.target.value);
+            }}
+            placeholder={'--paper: 0 0% 100%;\n--ink: 200 30% 12%;\n--accent-1: 200 80% 45%;\n--background: var(--paper);\n--foreground: var(--ink);\n--card: 0 0% 100%;\n…'}
+            className="w-full h-32 rounded-md border border-border bg-card px-3 py-2 text-[11px] font-mono outline-none focus:border-foreground/25"
+            spellCheck={false}
+          />
+          <div className="text-[10.5px] text-muted-foreground mt-1">
+            CSS variables only (no selectors). Applied as <code className="font-mono">:root {'{ ... }'}</code>.
+            See <a href="https://github.com/karany97/nandai-atelier/blob/main/src/index.css"
+              className="underline hover:no-underline"
+              target="_blank" rel="noreferrer noopener">src/index.css</a> for the variable list.
+          </div>
+        </div>
+      )}
+
+      <div className="text-[10.5px] text-muted-foreground mt-2">
+        Tip: append <code className="font-mono">?theme=terracotta</code> to the URL to override per-tab.
+        Operators serving multiple brands can set the <code className="font-mono">atelier-theme</code> cookie
+        in the gate to pre-pick a theme per subdomain — no per-brand bundle rebuild needed.
+      </div>
+    </div>
   );
 }

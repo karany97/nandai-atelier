@@ -13,6 +13,7 @@ import { ShortcutsOverlay } from './components/ShortcutsOverlay';
 import { TrinityDashboard } from './components/TrinityDashboard';
 import { AmbientBackdrop } from './components/AmbientBackdrop';
 import { ComputerPane, loadComputerConfig } from './components/ComputerPane';
+import { bootTheme } from './lib/theme';
 import type { BrainKey } from './lib/types';
 
 // Only two brains exist now; digits map cleanly.
@@ -52,6 +53,14 @@ function App() {
       document.body.classList.toggle('dark', theme === 'dark');
     }
   }, [theme]);
+
+  // Headless theme system (2026-05-16) — resolves theme from URL ?theme=,
+  // cookie atelier-theme, or localStorage; applies via [data-theme=...] or
+  // .dark class. Runs once at boot; later changes flow through SettingsDrawer's
+  // Theme dropdown which calls setThemeV2 directly.
+  useEffect(() => {
+    bootTheme();
+  }, []);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

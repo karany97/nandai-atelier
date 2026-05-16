@@ -80,6 +80,137 @@
     --input:               var(--paper-edge);
     --ring:                var(--accent-1);
   }
+
+  /* ─── Headless theme system (v1, 2026-05-16) ──────────────────────────────
+   *
+   *  `:root` above is the default paper/copper-gold theme.
+   *  `.dark` above is the default warm-ink dark theme.
+   *
+   *  The four blocks below are SWAPPABLE themes selected at runtime by
+   *  src/lib/theme.ts which sets `document.documentElement.dataset.theme`.
+   *  Each theme block overrides the same CSS variables — no rebuild
+   *  required. mythos-gate can server-inject a `<style id="atelier-theme-server">`
+   *  block with one of these blocks to prevent flash-of-default-theme.
+   *
+   *  Operators add custom themes by appending another `[data-theme="<name>"]`
+   *  block here (or via the SettingsDrawer "Custom CSS" textarea).
+   * ──────────────────────────────────────────────────────────────────────── */
+
+  /* terracotta — Nandai brand (warm clay + deep umber). Light-mode. */
+  [data-theme="terracotta"] {
+    --paper:        20 40% 95%;
+    --paper-deep:   18 35% 90%;
+    --paper-edge:   16 28% 82%;
+    --ink:          18 32% 18%;
+    --ink-soft:     18 22% 32%;
+    --ink-mute:     18 15% 50%;
+
+    --accent-1:     12 70% 42%;   /* terracotta */
+    --accent-2:     15 78% 50%;
+    --accent-soft:  18 65% 90%;
+
+    --background:          var(--paper);
+    --foreground:          var(--ink);
+    --card:                20 50% 99%;
+    --primary:             var(--accent-1);
+    --primary-foreground:  0 0% 100%;
+    --secondary:           var(--paper-deep);
+    --muted:               var(--paper-deep);
+    --muted-foreground:    var(--ink-mute);
+    --accent:              var(--accent-1);
+    --accent-foreground:   0 0% 100%;
+    --border:              var(--paper-edge);
+    --input:               var(--paper-edge);
+    --ring:                var(--accent-1);
+  }
+
+  /* pure-light — daytime ergonomics, AA-grade neutral. */
+  [data-theme="pure-light"] {
+    --paper:        0 0% 100%;
+    --paper-deep:   220 14% 96%;
+    --paper-edge:   220 13% 88%;
+    --ink:          222 47% 11%;
+    --ink-soft:     220 18% 30%;
+    --ink-mute:     220 9% 45%;
+
+    --accent-1:     221 83% 45%;   /* clear blue, 5.4:1 on white */
+    --accent-2:     221 90% 56%;
+    --accent-soft:  221 90% 95%;
+
+    --background:          var(--paper);
+    --foreground:          var(--ink);
+    --card:                0 0% 100%;
+    --primary:             var(--accent-1);
+    --primary-foreground:  0 0% 100%;
+    --secondary:           var(--paper-deep);
+    --muted:               var(--paper-deep);
+    --muted-foreground:    var(--ink-mute);
+    --accent:              var(--accent-1);
+    --accent-foreground:   0 0% 100%;
+    --border:              var(--paper-edge);
+    --input:               var(--paper-edge);
+    --ring:                var(--accent-1);
+  }
+
+  /* mono-print — black on white, single typeface. Print + low-bandwidth. */
+  [data-theme="mono-print"] {
+    --paper:        0 0% 100%;
+    --paper-deep:   0 0% 96%;
+    --paper-edge:   0 0% 80%;
+    --ink:          0 0% 0%;
+    --ink-soft:     0 0% 25%;
+    --ink-mute:     0 0% 45%;
+
+    --accent-1:     0 0% 0%;       /* mono — no accent */
+    --accent-2:     0 0% 0%;
+    --accent-soft:  0 0% 92%;
+
+    --background:          var(--paper);
+    --foreground:          var(--ink);
+    --card:                0 0% 100%;
+    --primary:             var(--accent-1);
+    --primary-foreground:  0 0% 100%;
+    --secondary:           var(--paper-deep);
+    --muted:               var(--paper-deep);
+    --muted-foreground:    var(--ink-mute);
+    --accent:              var(--accent-1);
+    --accent-foreground:   0 0% 100%;
+    --border:              var(--paper-edge);
+    --input:               var(--paper-edge);
+    --ring:                var(--accent-1);
+  }
+
+  /* accessible-hc — high contrast WCAG AAA palette for vision-impaired. */
+  [data-theme="accessible-hc"] {
+    --paper:        0 0% 0%;
+    --paper-deep:   0 0% 8%;
+    --paper-edge:   0 0% 30%;
+    --ink:          0 0% 100%;
+    --ink-soft:     0 0% 92%;
+    --ink-mute:     0 0% 80%;
+
+    --accent-1:     50 100% 60%;   /* bright yellow on black, ~12:1 contrast */
+    --accent-2:     50 100% 70%;
+    --accent-soft:  50 50% 18%;
+
+    --background:          var(--paper);
+    --foreground:          var(--ink);
+    --card:                0 0% 6%;
+    --primary:             var(--accent-1);
+    --primary-foreground:  0 0% 0%;
+    --secondary:           var(--paper-deep);
+    --muted:               var(--paper-deep);
+    --muted-foreground:    var(--ink-mute);
+    --accent:              var(--accent-1);
+    --accent-foreground:   0 0% 0%;
+    --border:              var(--paper-edge);
+    --input:               var(--paper-edge);
+    --ring:                var(--accent-1);
+  }
+
+  /* mono-print + accessible-hc kill the body grain — visually noisy in those modes. */
+  [data-theme="mono-print"] body::before,
+  [data-theme="accessible-hc"] body::before { display: none; }
 }
 
 @layer base {
