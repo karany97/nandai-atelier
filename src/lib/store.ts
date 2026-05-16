@@ -33,6 +33,7 @@ import {
 } from './tool-bridge';
 import {
   loadAllConversations, saveManyConversations, deleteConversationFromDB,
+  enforceCap,
   clearAllConversations as _clearAllConversationsFromDB,
 } from './persist';
 
@@ -414,6 +415,16 @@ export async function probeConnection(): Promise<ConnectStatus> {
 }
 export async function probeBridge(): Promise<BridgeStatus> {
   const c = getState().connection;
+  // B6 fix: skip the probe entirely if the bridge URL is the localhost
+  // default AND the operator hasn't opted into auto-escalation. The default
+  // would-be-probe spams the console with ERR_CONNECTION_REFUSED on every
+  // first-time visitor who doesn't run Claude Code locally — pointlessly
+  // noisy when the feature is opt-in.
+  const isDefaultBridge = c.bridgeUrl === 'http://127.0.0.1:8765';
+  if (isDefaultBridge && !c.autoEscalate) {
+    setState(() => ({ bridgeStatus: { kind: 'unknown' } }));
+    return { kind: 'unknown' };
+  }
   setState(() => ({ bridgeStatus: { kind: 'probing' } }));
   const status = await testBridge(c);
   setState(() => ({ bridgeStatus: status }));
@@ -668,6 +679,10 @@ if (typeof window !== 'undefined') {
   // Async hydrate after first paint — never blocks the initial render.
   queueMicrotask(async () => {
     const saved = await loadAllConversations();
+    // B8 fix: enforce LRU cap on boot too. Previously eviction only fired
+    // on the save() path, so a stale tab with > MAX_CONVS rows in IDB would
+    // stay bloated until the user touched a conv. Now: fire once at boot.
+    void enforceCap();
     if (!saved.length) return;
     setState((s) => {
       const byId = new Map<string, Conversation>();

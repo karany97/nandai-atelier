@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MotionConfig } from 'framer-motion';
 import {
-  useStore, setPalette, newConversation, setSettings as setSettingsOpen, setHelp,
-  setDashboard, stopGenerating, patchSettings, setActiveArtifact,
+  useStore, getState, setPalette, newConversation, setSettings as setSettingsOpen, setHelp,
+  setDashboard, stopGenerating, patchSettings, setActiveArtifact, setTheme,
 } from './lib/store';
 import { Sidebar } from './components/Sidebar';
 import { ChatPane } from './components/ChatPane';
@@ -58,6 +58,15 @@ function App() {
       if (cmd && (e.key === '\\' || e.code === 'Backslash')) {
         e.preventDefault();
         setComputerOpen((v) => !v);
+        return;
+      }
+      // B4 fix: Cmd+Shift+T toggles theme (Cmd+D is taken by dashboard).
+      // The previous validator run flagged "no theme keyboard shortcut" as
+      // a gap; this binds the most-mnemonic one.
+      if (cmd && e.shiftKey && e.key.toLowerCase() === 't') {
+        e.preventDefault();
+        const cur = getState().settings.theme;
+        setTheme(cur === 'dark' ? 'light' : 'dark');
         return;
       }
       if (cmd && ROUTE_DIGIT[e.key])          { e.preventDefault(); patchSettings({ routeMode: ROUTE_DIGIT[e.key] }); return; }
