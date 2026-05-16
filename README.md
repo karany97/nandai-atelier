@@ -4,7 +4,7 @@
 
 ### Three brains vote on every answer.<br/>Local. Single file. 108 tools.
 
-[![Bundle size](https://img.shields.io/badge/bundle-537%20KB-c2410c)](./bundle.html)
+[![Bundle size](https://img.shields.io/badge/bundle-540%20KB-c2410c)](./bundle.html)
 [![License: MIT](https://img.shields.io/badge/license-MIT-22c55e)](./LICENSE)
 [![Build journal](https://img.shields.io/badge/build%20journal-18%20ticks-eab308)](./journal/)
 [![Live demo](https://img.shields.io/badge/demo-atelier.nandai.org-0f766e)](https://atelier.nandai.org)
@@ -18,7 +18,7 @@
 
 ---
 
-Atelier is one 537 KB HTML file. Open it, point it at any OpenAI-shape LLM
+Atelier is one 540 KB HTML file. Open it, point it at any OpenAI-shape LLM
 gateway, and you get a chat surface that matches Claude.ai for density and
 keyboard rhythm — but every answer is **voted on by three local models**
 (a fast 27B, a thinking 36B, and a tool-specialist 8B), audited turn-by-turn
@@ -75,7 +75,7 @@ data never leaves your LAN.
 
 ## What this is
 
-A single 537 KB HTML file that, when served behind a thin auth proxy and an
+A single 540 KB HTML file that, when served behind a thin auth proxy and an
 OpenAI-compatible LLM gateway, gives you:
 
 - **Multi-LLM routing** — local Trinity (Qwen 3.6-27B *fast*, Hermes 4.3-36B
@@ -495,10 +495,12 @@ A: Yes. Run `nandai-fast` (Qwen 3.6-27B Q4) and `nandai-think` (Hermes
 4.3-36B Q4) sequentially via `mythos-swap.sh`. `nandai-tool` runs on CPU.
 You give up the concurrency speedup but the chat is fully functional.
 
-**Q: Is `bundle.html` actually 537 KB? That feels small.**
-A: It is. Run `wc -c bundle.html` — confirms `537,103`. React + Tailwind +
-shadcn/ui + framer-motion + lucide-react + ~3,800 lines of app code,
-inlined and minified.
+**Q: Is `bundle.html` actually 540 KB? That feels small.**
+A: It is. Run `wc -c bundle.html` — confirms `540,434`. React + Tailwind +
+shadcn/ui + framer-motion + lucide-react + ~3,800 lines of app code +
+the Canvas2D ambient backdrop, inlined and minified. *No Three.js, no
+WebGL libraries — the 3D-feel particle effect is pure Canvas2D so the
+bundle stays operator-grade small.*
 
 **Q: How do I add a tool?**
 A: Stand up any MCP server, mount it through mcpo, restart mcpo. The chat
@@ -556,6 +558,6 @@ verification discipline (every PR needs an evidence file in
 **[Contributing](./CONTRIBUTING.md)**
 
 Built on a Mac M4 Pro. Inference on dual RTX 3090.<br/>
-The chat fits in one HTML file. The journal explains why.
+The chat fits in one 540 KB HTML file. The journal explains why.
 
 </div>

@@ -11,6 +11,7 @@ import { CommandPalette } from './components/CommandPalette';
 import { SettingsDrawer } from './components/SettingsDrawer';
 import { ShortcutsOverlay } from './components/ShortcutsOverlay';
 import { TrinityDashboard } from './components/TrinityDashboard';
+import { AmbientBackdrop } from './components/AmbientBackdrop';
 import type { BrainKey } from './lib/types';
 
 // Only two brains exist now; digits map cleanly.
@@ -59,6 +60,15 @@ function App() {
 
   return (
     <MotionConfig reducedMotion={effectiveReduce ? 'always' : 'never'}>
+      {/* Atmospheric particle backdrop — pure HTML5 Canvas2D, ~140 SLOC,
+          zero deps (no Three.js). 480 particles drift through a 3D-projected
+          shell, accelerated while the AI is generating. Skipped entirely
+          when the user opts into reduced motion (OS preference or explicit
+          setting). The legacy WebGL version is preserved at
+          `src/components/NeuralBackground.tsx` for operators who want
+          a more elaborate backdrop and don't mind the +800 KB Three.js tax. */}
+      {!effectiveReduce && <AmbientBackdrop />}
+
       <a
         href="#chat-input"
         className="sr-only focus:not-sr-only fixed top-2 left-2 z-[100]"
