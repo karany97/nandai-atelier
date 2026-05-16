@@ -12,6 +12,7 @@ import { SettingsDrawer } from './components/SettingsDrawer';
 import { ShortcutsOverlay } from './components/ShortcutsOverlay';
 import { TrinityDashboard } from './components/TrinityDashboard';
 import { AmbientBackdrop } from './components/AmbientBackdrop';
+import { ComputerPane, loadComputerConfig } from './components/ComputerPane';
 import type { BrainKey } from './lib/types';
 
 // Only two brains exist now; digits map cleanly.
@@ -23,6 +24,12 @@ function App() {
   const theme = useStore((s) => s.settings.theme);
   const activeArtifactMsgId = useStore((s) => s.activeArtifactMsgId);
   const reduceMotion = useStore((s) => s.settings.reduceMotion);
+
+  // Destiny Computer pane (right-side iframe of the live KasmVNC desktop).
+  // Default-open if the operator's saved config has autoOpen=true.
+  const [computerOpen, setComputerOpen] = useState<boolean>(
+    () => loadComputerConfig().autoOpen
+  );
 
   // D-A11Y-005: honour OS preference too, OR explicit user setting.
   const reduceMotionSystem = useMemo(() => {
@@ -47,6 +54,12 @@ function App() {
       if (cmd && e.key === ',')               { e.preventDefault(); setSettingsOpen(true); return; }
       if (cmd && e.key.toLowerCase() === 'd') { e.preventDefault(); setDashboard(true); return; }
       if (cmd && e.key === '.')               { e.preventDefault(); stopGenerating(); return; }
+      // Cmd+\ — toggle the Destiny Computer pane
+      if (cmd && (e.key === '\\' || e.code === 'Backslash')) {
+        e.preventDefault();
+        setComputerOpen((v) => !v);
+        return;
+      }
       if (cmd && ROUTE_DIGIT[e.key])          { e.preventDefault(); patchSettings({ routeMode: ROUTE_DIGIT[e.key] }); return; }
       if (!inField && e.key === '?')          { e.preventDefault(); setHelp(true); return; }
       if (!inField && e.key === 'Escape') {
@@ -60,6 +73,12 @@ function App() {
 
   return (
     <MotionConfig reducedMotion={effectiveReduce ? 'always' : 'never'}>
+      {/* Destiny Computer pane — right-side iframe for the live AI desktop.
+          Toggleable via Cmd+\\ keyboard shortcut OR the Monitor icon in the
+          sidebar. When open, takes 40vw on the right; chat reflows to the
+          remaining 60vw. Maximize mode covers the full viewport. */}
+      <ComputerPane open={computerOpen} onClose={() => setComputerOpen(false)} />
+
       {/* Atmospheric particle backdrop — pure HTML5 Canvas2D, ~140 SLOC,
           zero deps (no Three.js). 480 particles drift through a 3D-projected
           shell, accelerated while the AI is generating. Skipped entirely
