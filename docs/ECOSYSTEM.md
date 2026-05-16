@@ -72,7 +72,7 @@ In a chat app, the AI answers questions. In our ecosystem, the AI:
 |------|------|--------|
 | [karany97/nandai-atelier](https://github.com/karany97/nandai-atelier) | This. The chat surface. | shipped |
 | [karany97/destiny-computer](https://github.com/karany97/destiny-computer) | KasmVNC + Anthropic Computer Use driver (single-desktop) | v0.2 shipped |
-| `karany97/atelier-os` | **Multi-session** Sway/Wayland fleet — one desktop per teammate, swappable open-weights model ([Holo3-35B-A3B](https://huggingface.co/HCompany/Holo3-35B-A3B) default), iframe-embeddable | v0.1.1 — repo opens this week |
+| [karany97/atelier-os](https://github.com/karany97/atelier-os) | **Multi-session** Sway/Wayland fleet — one desktop per teammate, swappable open-weights model ([Holo3-35B-A3B](https://huggingface.co/HCompany/Holo3-35B-A3B) default), iframe-embeddable | v0.1.5 shipped |
 | [karany97/tooltalk](https://github.com/karany97/tooltalk) | Translator: Gemma 4 text-format → OpenAI tool_calls | v0.1 |
 | [karany97/moa-router](https://github.com/karany97/moa-router) | Self-MoA aggregator (ICLR 2025) | v0.1 |
 | [karany97/pingate](https://github.com/karany97/pingate) | The simplest signed-cookie PIN gate | v0.1 |
@@ -86,10 +86,10 @@ These are related but different. The short version:
   Anthropic Computer Use). Perfect for "I want my AI to have a body and
   the demo to be small enough to read." `docker compose up` and you
   have one teammate.
-- **atelier-os** is *N* desktops as a fleet (Sway/Wayland + Selkies WebRTC +
-  Anthropic OR self-hosted Holo3-35B-A3B). Persistent `/home/operator`
-  per session. Iframe-embed any session in any chat surface. Built
-  for the "every employee has their own AI" pattern.
+- **atelier-os** is *N* desktops as a fleet (Sway/Wayland + wayvnc + noVNC
+  for live iframe-embeddable streaming + Anthropic OR self-hosted
+  Holo3-35B-A3B). Persistent `/home/operator` per session. 259/259 tests
+  pass. Built for the "every employee has their own AI" pattern.
 
 You can run either independently. Atelier wires up to both via the same
 `/api/computer/*` shape — pick the one that matches the scale you need.
@@ -114,11 +114,12 @@ Anthropic Computer Use driver. Read the entire codebase in an
 afternoon. Best for "I want the smallest possible 'AI with a body'
 demo."
 
-**Multi-session fleet (atelier-os)** — N Sway+Selkies WebRTC
-containers, one per teammate, all behind one FastAPI fleet
-(`/sessions`, `/sessions/{id}/task`, SSE step stream). Swappable
-backend per session — Anthropic for production quality, Holo3-35B-A3B
+**Multi-session fleet (atelier-os)** — N Sway+Wayland containers
+behind one FastAPI fleet (`/sessions`, `/sessions/{id}/task`, SSE
+step stream). wayvnc + noVNC iframe-embeddable per session.
+Swappable backend — Anthropic for production quality, Holo3-35B-A3B
 (Apache 2.0, OSWorld-Verified 77.8%) for $0/inference self-hosted.
+259/259 tests pass against live infrastructure.
 Each container persists `/home/operator/` across restarts so the AI's
 work survives reboots (browser tabs, downloaded files, ssh keys it
 generated, partial scripts it was writing).
