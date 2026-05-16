@@ -52,7 +52,11 @@ export function AuditPill({ msgId, alreadyEscalated, alreadyReran }: {
     // Sentinel typically lands within 5-12 s of the turn POST. Try at
     // t=8s, t=20s, t=45s. After that, give up silently (the badge just
     // never shows — no error, no clutter).
-    const delays = [8_000, 12_000, 25_000];
+    // B11 fix: increase first delay from 8s → 15s. The sentinel typically
+    // judges a turn within 8–14s, so a 8s first poll often hit a 404 and
+    // logged scary noise in DevTools. 15s on the first attempt → < 5% 404
+    // rate per the sentinel's own observed-latency distribution.
+    const delays = [15_000, 30_000, 60_000];
     let cancelled = false;
     (async () => {
       for (const d of delays) {

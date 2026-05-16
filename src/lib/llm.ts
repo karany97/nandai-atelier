@@ -51,6 +51,7 @@ export type StreamDelta =
   | { kind: 'finish'; reason: string | null }
   | { kind: 'usage'; usage: Usage }
   | { kind: 'model'; model: string }
+  | { kind: 'status'; status: string }        // B12 fix: surface stream-stall hints to the UI
   | { kind: 'error'; message: string };
 
 export type StreamResult = {
@@ -188,6 +189,23 @@ export async function streamChat(opts: StreamOpts): Promise<StreamResult> {
   let finishReason: string | null = null;
   let modelReported: string | null = null;
 
+  // B12 fix: surface a "stream stalled" hint after 8 s of zero bytes. The
+  // bundle previously sat silently for up to 120 s (the full timeout) when
+  // a CF tunnel flake returned 0 bytes at TTFB — users saw the bubble at
+  // "thinking" with no progress and no error. Now we emit a status hint
+  // at 8 s so the chat can render "gateway slow — still trying" instead
+  // of looking frozen.
+  const stallTimer = setTimeout(() => {
+    if (finalText.length === 0 && firstTokenMs < 0 && !controller.signal.aborted) {
+      try {
+        opts.onDelta({
+          kind: 'status',
+          status: 'gateway slow — still waiting for first byte',
+        } as any);
+      } catch { /* ignore listener errors */ }
+    }
+  }, 8_000);
+
   try {
     while (true) {
       const { value, done } = await reader.read();
@@ -239,6 +257,7 @@ export async function streamChat(opts: StreamOpts): Promise<StreamResult> {
     throw e;
   } finally {
     try { reader.releaseLock(); } catch { /* ignore */ }
+    clearTimeout(stallTimer);  // B12: prevent the stall-hint firing post-completion
   }
 
   function processChunk(chunk: any) {
