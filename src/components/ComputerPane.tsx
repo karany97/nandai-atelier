@@ -44,11 +44,26 @@ export type ComputerConfig = {
   driverUrl: string;
 };
 
+// ─── Deploy-time bake sentinels (same pattern as connect.ts) ───────────────
+// scripts/deploy-atelier.sh seds these to operator-specific defaults so a
+// private deploy can pre-wire the Computer pane without making every user
+// type URLs into Settings. Sentinels survive untouched in the public bundle.
+const BAKED_KASMVNC_URL = '__BAKED_KASMVNC_URL__';   // deploy.sh: NANDAI_KASMVNC_URL
+const BAKED_DRIVER_URL  = '__BAKED_DRIVER_URL__';    // deploy.sh: NANDAI_DRIVER_URL
+
+function unbakeComputer(s: string): string {
+  // Same collision-safe pattern as connect.ts unbake(). Build the prefix
+  // at runtime so the minifier doesn't emit a bare '__BAKED_' literal that
+  // deploy.sh's blind sed could accidentally hit.
+  const SENTINEL_PREFIX = ['_', '_', 'B', 'A', 'K', 'E', 'D', '_'].join('');
+  return s.startsWith(SENTINEL_PREFIX) ? '' : s;
+}
+
 const DEFAULT: ComputerConfig = {
-  url: '',
+  url: unbakeComputer(BAKED_KASMVNC_URL),
   label: 'Computer',
   autoOpen: false,
-  driverUrl: '',
+  driverUrl: unbakeComputer(BAKED_DRIVER_URL),
 };
 
 export function loadComputerConfig(): ComputerConfig {
@@ -91,7 +106,12 @@ export function ComputerPane({ open, onClose }: Props) {
 
   if (!open) return null;
 
-  // Empty-state — no URL configured yet
+  // Empty-state — no KasmVNC URL configured yet.
+  //
+  // If driverUrl IS configured, we still render the DriverConsole at the
+  // bottom — the operator can dispatch tasks and watch step records even
+  // without the visual KasmVNC iframe. The empty hint above the console
+  // tells them how to add the iframe for full UX.
   if (!cfg.url) {
     return (
       <aside
@@ -109,13 +129,25 @@ export function ComputerPane({ open, onClose }: Props) {
         <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
           <Monitor size={32} className="text-muted-foreground mb-3" />
           <h3 className="text-[15px] font-medium text-foreground">
-            No Computer configured
+            {cfg.driverUrl ? 'Driver ready (no visual desktop yet)' : 'No Computer configured'}
           </h3>
           <p className="text-[13px] text-muted-foreground mt-2 max-w-xs leading-relaxed">
-            Open Settings → Computer and paste the URL of a KasmVNC / noVNC
-            desktop you want the chat to drive. Common pattern:
-            {' '}
-            <code className="font-mono text-[12px]">https://pc-you.your-domain.com/</code>
+            {cfg.driverUrl ? (
+              <>
+                Tasks dispatched below will run on the AI-controlled desktop
+                via{' '}
+                <code className="font-mono text-[12px]">{cfg.driverUrl}</code>.
+                Add the KasmVNC URL in Settings → Computer to also see the
+                desktop live while the AI works.
+              </>
+            ) : (
+              <>
+                Open Settings → Computer and paste the URL of a KasmVNC / noVNC
+                desktop you want the chat to drive. Common pattern:
+                {' '}
+                <code className="font-mono text-[12px]">https://pc-you.your-domain.com/</code>
+              </>
+            )}
           </p>
           <p className="text-[11.5px] text-muted-foreground/70 mt-4 max-w-xs leading-relaxed">
             See <a href="https://github.com/karany97/destiny-computer"
@@ -125,6 +157,7 @@ export function ComputerPane({ open, onClose }: Props) {
             </a> for the Docker compose that spins one up locally.
           </p>
         </div>
+        {cfg.driverUrl && <DriverConsole driverUrl={cfg.driverUrl} />}
       </aside>
     );
   }

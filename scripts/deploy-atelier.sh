@@ -12,9 +12,11 @@
 # What it does (in order):
 #   1. Resolve $BUNDLE, $LABEL.
 #   2. Load `.env` from the repo root (if present) to populate:
-#        NANDAI_LITELLM_URL  → __BAKED_BASE_URL__   (real LiteLLM endpoint)
-#        NANDAI_LITELLM_KEY  → __BAKED_API_KEY__    (Bearer key)
-#        NANDAI_TOOLS_URL    → __BAKED_TOOLS_URL__  (mcpo middleware)
+#        NANDAI_LITELLM_URL  → __BAKED_BASE_URL__     (real LiteLLM endpoint)
+#        NANDAI_LITELLM_KEY  → __BAKED_API_KEY__      (Bearer key)
+#        NANDAI_TOOLS_URL    → __BAKED_TOOLS_URL__    (mcpo middleware)
+#        NANDAI_KASMVNC_URL  → __BAKED_KASMVNC_URL__  (Computer pane iframe src)
+#        NANDAI_DRIVER_URL   → __BAKED_DRIVER_URL__   (destiny-computer driver)
 #        ATELIER_DEPLOY_HOST → SSH target (user@host or alias)
 #        ATELIER_DEPLOY_KEY  → optional -i path
 #        ATELIER_REMOTE_PATH → file path on host (default /srv/nandai-atelier/index.html)
@@ -63,6 +65,8 @@ fi
 NANDAI_LITELLM_URL="${NANDAI_LITELLM_URL:-}"
 NANDAI_LITELLM_KEY="${NANDAI_LITELLM_KEY:-}"
 NANDAI_TOOLS_URL="${NANDAI_TOOLS_URL:-}"
+NANDAI_KASMVNC_URL="${NANDAI_KASMVNC_URL:-}"
+NANDAI_DRIVER_URL="${NANDAI_DRIVER_URL:-}"
 
 ATELIER_DEPLOY_HOST="${ATELIER_DEPLOY_HOST:-}"
 ATELIER_DEPLOY_KEY="${ATELIER_DEPLOY_KEY:-}"
@@ -90,6 +94,8 @@ esc() { printf '%s' "$1" | sed -e 's/[\/&|]/\\&/g'; }
 sed -i.bak "s|__BAKED_BASE_URL__|$(esc "${NANDAI_LITELLM_URL:-}")|g" "$WORK_BUNDLE"
 sed -i.bak "s|__BAKED_API_KEY__|$(esc "${NANDAI_LITELLM_KEY:-}")|g" "$WORK_BUNDLE"
 sed -i.bak "s|__BAKED_TOOLS_URL__|$(esc "${NANDAI_TOOLS_URL:-}")|g" "$WORK_BUNDLE"
+sed -i.bak "s|__BAKED_KASMVNC_URL__|$(esc "${NANDAI_KASMVNC_URL:-}")|g" "$WORK_BUNDLE"
+sed -i.bak "s|__BAKED_DRIVER_URL__|$(esc "${NANDAI_DRIVER_URL:-}")|g" "$WORK_BUNDLE"
 rm -f "$WORK_BUNDLE.bak"
 
 # ─── 4. Fingerprint ─────────────────────────────────────────────────────────
