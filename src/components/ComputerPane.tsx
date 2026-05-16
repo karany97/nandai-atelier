@@ -26,6 +26,7 @@
 
 import { useEffect, useState } from 'react';
 import { Maximize2, Minimize2, ExternalLink, X, Monitor } from 'lucide-react';
+import { DriverConsole } from './DriverConsole';
 
 const LS_KEY = 'nandai-chat:computer-v1';
 
@@ -36,12 +37,18 @@ export type ComputerConfig = {
   label: string;
   /** Open by default on every fresh boot? */
   autoOpen: boolean;
+  /** Base URL of the destiny-computer driver (e.g. http://127.0.0.1:8090 or https://driver.example.com).
+   *  When set, the pane shows a "tell the AI what to do" footer that POSTs
+   *  goals to the driver and streams step records back via SSE.
+   *  Leave empty to hide the footer (KasmVNC iframe only — manual drive mode). */
+  driverUrl: string;
 };
 
 const DEFAULT: ComputerConfig = {
   url: '',
   label: 'Computer',
   autoOpen: false,
+  driverUrl: '',
 };
 
 export function loadComputerConfig(): ComputerConfig {
@@ -148,6 +155,13 @@ export function ComputerPane({ open, onClose }: Props) {
         allow="clipboard-read; clipboard-write; fullscreen"
         loading="lazy"
       />
+      {/* DriverConsole only renders if the operator has configured a driver
+       *  URL. Without it the pane is "manual drive mode" — the operator (or
+       *  the AI via their own session inside KasmVNC) clicks around directly
+       *  via the iframe. With driverUrl set, the chat can dispatch tasks
+       *  to the destiny-computer FastAPI driver and watch step records
+       *  stream back. */}
+      {cfg.driverUrl && <DriverConsole driverUrl={cfg.driverUrl} />}
     </aside>
   );
 }

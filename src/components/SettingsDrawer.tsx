@@ -235,6 +235,21 @@ export function SettingsDrawer() {
                     className="w-full rounded-md border border-border bg-card px-3 py-2 text-[13px] outline-none focus:border-foreground/25"
                   />
                 </LField>
+                <LField label="Driver URL (optional — enables the autonomous loop)">
+                  <input
+                    value={computer.driverUrl}
+                    onChange={(e) => updateComputer({ driverUrl: e.target.value })}
+                    placeholder="http://127.0.0.1:8090 or https://driver.example.com"
+                    className="w-full rounded-md border border-border bg-card px-3 py-2 text-[13px] font-mono outline-none focus:border-foreground/25"
+                  />
+                  <div className="text-[10.5px] text-muted-foreground mt-1">
+                    Base URL of the destiny-computer driver (FastAPI on :8090 by
+                    default). With this set, the pane shows a "tell the AI what
+                    to do" footer that POSTs goals to <span className="font-mono">/api/task</span> and
+                    streams step records back via Server-Sent-Events. Leave empty
+                    for manual-drive mode (KasmVNC iframe only).
+                  </div>
+                </LField>
                 <Toggle label="Open automatically on chat load" icon={<Monitor size={12} />}
                   value={computer.autoOpen}
                   onChange={(v) => updateComputer({ autoOpen: v })} />
