@@ -1,0 +1,37 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.parcel-cache/
+dist/
+node_modules/
+.DS_Store
+
+# Bundle artifact IS the product — DO NOT ignore it.
+# It ships in releases and gets linked from the README.
+# (Comment kept so future me doesn't re-add it.)
+
+# Local secrets / per-operator config — never commit
+.env
+.env.local
+src/lib/defaults.local.ts

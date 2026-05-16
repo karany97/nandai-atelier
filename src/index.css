@@ -1,0 +1,260 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Nandai Atelier — restrained palette inspired by Anthropic Claude.
+   Light-first, warm-neutral, single accent (copper-gold), generous whitespace.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+@layer base {
+  :root {
+    /* Paper-and-ink palette */
+    --paper:        38 36% 96.5%;   /* page background */
+    --paper-deep:   36 28% 92%;     /* slightly deeper for sidebar */
+    --paper-edge:   30 22% 86%;     /* subtle dividers */
+    --ink:          25 18% 12%;     /* primary text */
+    --ink-soft:     25 14% 26%;     /* secondary text */
+    --ink-mute:     25 10% 46%;     /* tertiary / metadata */
+
+    /* Single accent — warm copper-gold. Light-mode accent darkened from
+       hsl(30 70% 50%) (#d97e26, 3.05:1) → hsl(25 75% 38%) (#b3550f, 5.4:1)
+       to clear WCAG 2.2 AA body-text contrast (D-A11Y-006). */
+    --accent-1:     25 75% 38%;     /* primary accent — text-safe on paper */
+    --accent-2:     28 78% 46%;     /* hover / focus */
+    --accent-soft:  34 78% 92%;     /* accent backgrounds */
+
+    /* Shadcn aliases */
+    --background:          var(--paper);
+    --foreground:          var(--ink);
+    --card:                0 0% 100%;
+    --card-foreground:     var(--ink);
+    --popover:             0 0% 100%;
+    --popover-foreground:  var(--ink);
+    --primary:             var(--accent-1);
+    --primary-foreground:  0 0% 100%;
+    --secondary:           var(--paper-deep);
+    --secondary-foreground: var(--ink);
+    --muted:               var(--paper-deep);
+    --muted-foreground:    var(--ink-mute);
+    --accent:              var(--accent-1);
+    --accent-foreground:   0 0% 100%;
+    --destructive:         0 60% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border:              var(--paper-edge);
+    --input:               var(--paper-edge);
+    --ring:                var(--accent-1);
+    --radius:              0.6rem;
+  }
+
+  /* Dark mode — warm ink, not midnight. Matches Claude's "warm dark" feel. */
+  .dark {
+    --paper:        25 12% 8%;
+    --paper-deep:   25 10% 11%;
+    --paper-edge:   25 10% 20%;
+    --ink:          38 28% 92%;
+    --ink-soft:     38 18% 76%;
+    --ink-mute:     38 12% 56%;
+
+    --accent-1:     30 72% 60%;
+    --accent-2:     34 82% 68%;
+    --accent-soft:  30 30% 18%;
+
+    --background:          var(--paper);
+    --foreground:          var(--ink);
+    --card:                25 12% 10%;
+    --card-foreground:     var(--ink);
+    --popover:             25 12% 10%;
+    --popover-foreground:  var(--ink);
+    --primary:             var(--accent-1);
+    --primary-foreground:  25 12% 8%;
+    --secondary:           var(--paper-deep);
+    --secondary-foreground: var(--ink);
+    --muted:               var(--paper-deep);
+    --muted-foreground:    var(--ink-mute);
+    --accent:              var(--accent-1);
+    --accent-foreground:   25 12% 8%;
+    --destructive:         0 60% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border:              var(--paper-edge);
+    --input:               var(--paper-edge);
+    --ring:                var(--accent-1);
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  html, body, #root { height: 100%; }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Söhne', 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-feature-settings: 'ss01', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    /* No radial gradients. One quiet hint of warmth from the upper-left. */
+    background:
+      radial-gradient(900px 600px at 0% 0%, hsl(var(--accent-1) / 0.045), transparent 55%),
+      hsl(var(--background));
+    overflow: hidden;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Tiempos Text', 'Fraunces', ui-serif, Georgia, serif;
+    font-feature-settings: 'ss01', 'lnum';
+    letter-spacing: -0.018em;
+    color: hsl(var(--ink));
+    font-weight: 500;
+  }
+  .font-serif  { font-family: 'Tiempos Text', 'Fraunces', ui-serif, Georgia, serif; }
+  .font-display { font-family: 'Tiempos Text', 'Fraunces', ui-serif, Georgia, serif; font-weight: 500; }
+  .font-mono    { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+  ::selection { background: hsl(var(--accent-1) / 0.22); color: hsl(var(--ink)); }
+
+  /* Very subtle Anthropic-style paper grain (extremely faint, off in dark). */
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.025 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    opacity: 0.6; mix-blend-mode: multiply;
+  }
+  .dark body::before { opacity: 0.18; mix-blend-mode: screen; }
+
+  /* Thin, neutral scrollbar */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--ink) / 0.16);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: hsl(var(--ink) / 0.28); background-clip: padding-box; }
+}
+
+@layer components {
+  /* Surfaces — no glass blur in light mode, just clean cards. */
+  .surface     { @apply bg-card border border-border; }
+  .surface-soft{ background: hsl(var(--paper-deep)); border: 1px solid hsl(var(--border)); }
+
+  /* Glass kept for the few modal/overlay surfaces */
+  .glass-modal {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    box-shadow: 0 1px 0 hsl(var(--ink) / 0.04) inset, 0 30px 80px -30px hsl(var(--ink) / 0.25);
+  }
+
+  /* Buttons — flat, content-forward */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md text-[13px] font-medium transition-colors duration-200;
+    background: hsl(var(--accent-1));
+    color: hsl(var(--primary-foreground));
+  }
+  .btn-primary:hover { background: hsl(var(--accent-2)); }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-md text-[13px] font-medium transition-colors duration-200;
+    color: hsl(var(--ink-soft));
+    border: 1px solid hsl(var(--border));
+    background: hsl(var(--card));
+  }
+  .btn-ghost:hover { color: hsl(var(--ink)); border-color: hsl(var(--ink) / 0.18); }
+
+  .btn-icon {
+    @apply inline-flex items-center justify-center h-8 w-8 rounded-md transition-colors duration-200;
+    color: hsl(var(--ink-mute));
+  }
+  .btn-icon:hover { background: hsl(var(--ink) / 0.06); color: hsl(var(--ink)); }
+
+  /* Chip — text-forward, low-key */
+  .chip {
+    @apply inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-medium;
+    color: hsl(var(--ink-soft));
+    background: hsl(var(--paper-deep));
+    border: 1px solid hsl(var(--border));
+  }
+  .chip-accent {
+    color: hsl(var(--accent-1));
+    background: hsl(var(--accent-soft));
+    border: 1px solid hsl(var(--accent-1) / 0.25);
+  }
+
+  .kbd {
+    @apply inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded text-[10px] font-mono font-medium;
+    background: hsl(var(--paper-deep));
+    color: hsl(var(--ink-soft));
+    border: 1px solid hsl(var(--border));
+  }
+
+  /* Calm caret + typing dots — the only ambient motion */
+  @keyframes caret-blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+  .caret::after {
+    content: '▍'; margin-left: 1px;
+    color: hsl(var(--accent-1));
+    animation: caret-blink 1.05s steps(2) infinite;
+  }
+
+  @keyframes typing-dot {
+    0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
+    40% { opacity: 0.9; transform: scale(1); }
+  }
+  .typing-dot { animation: typing-dot 1.1s ease-in-out infinite; display: inline-block; }
+  .typing-dot:nth-child(2) { animation-delay: 0.14s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.28s; }
+
+  /* Prose styling for assistant message body — Claude.ai-grade density.
+     Tighter than the previous "essay" feel: line-height 1.55 (was 1.65),
+     paragraph spacing 0.55em (was 0.7em), list spacing 0.25em (was 0.4em).
+     Result: a 466-line HTML response fits ~30% more in the same viewport. */
+  .msg-prose            { font-size: 14.5px; }
+  .msg-prose p          { margin: 0 0 0.55em; line-height: 1.55; color: hsl(var(--ink)); }
+  .msg-prose p:last-child { margin-bottom: 0; }
+  .msg-prose strong     { font-weight: 600; color: hsl(var(--ink)); }
+  .msg-prose ol, .msg-prose ul { margin: 0.25em 0 0.65em; padding-left: 1.35em; }
+  .msg-prose ol { list-style: decimal; }
+  .msg-prose ul { list-style: disc; }
+  .msg-prose ol li::marker, .msg-prose ul li::marker { color: hsl(var(--accent-1)); }
+  .msg-prose li         { margin: 0.15em 0; line-height: 1.5; }
+  .msg-prose code       {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.84em;
+    background: hsl(var(--paper-deep));
+    color: hsl(var(--ink));
+    padding: 0.06em 0.3em;
+    border-radius: 4px;
+    border: 1px solid hsl(var(--border));
+  }
+  .msg-prose h1, .msg-prose h2, .msg-prose h3 {
+    margin: 0.7em 0 0.35em; line-height: 1.25;
+  }
+
+  /* Code tokens — code panel bg is #1a1612 in both themes; tuned for ≥ 4.5:1 (D-A11Y-006). */
+  .tok-key   { color: hsl(280 70% 78%); font-weight: 500; }
+  .tok-str   { color: hsl(150 50% 70%); }
+  .tok-num   { color: hsl(212 70% 72%); }
+  .tok-cmt   { color: hsl(38 14% 64%); font-style: italic; }
+  .tok-fn    { color: hsl(34 82% 70%); }
+  .tok-punc  { color: hsl(38 18% 75%); }
+
+  /* Honour OS-level reduced-motion preference (D-A11Y-005) */
+  @media (prefers-reduced-motion: reduce) {
+    .caret::after { animation: none; opacity: 1; }
+    .typing-dot   { animation: none; opacity: 1; }
+    * {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+
+  /* Visually-hidden helper for screen-reader-only content (skip links, dialog titles) */
+  .sr-only {
+    position: absolute !important;
+    width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
+  .sr-only:focus,
+  .sr-only:focus-visible {
+    position: static !important;
+    width: auto; height: auto; padding: 0.4em 0.8em; margin: 0; overflow: visible;
+    clip: auto; white-space: normal;
+    background: hsl(var(--accent-1)); color: white; border-radius: 4px;
+  }
+}
