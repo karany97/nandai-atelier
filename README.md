@@ -99,6 +99,12 @@ OpenAI-compatible LLM gateway, gives you:
   verdicts sync via `BroadcastChannel` so they never disagree
 - **IndexedDB persistence** with LRU cap (200 convs, oldest unpinned evicted)
   and export / import / clear-all (with confirm-by-typing for destructive ops)
+- **Computer pane** — right-side iframe embeds a live KasmVNC desktop +
+  `DriverConsole` footer that dispatches goals to the
+  [destiny-computer](https://github.com/karany97/destiny-computer)
+  driver and streams step records (`step 3 · left_click(612,431) · ok`)
+  back via Server-Sent-Events. Operator types a goal, AI drives the
+  desktop, both surfaces visible in one chat.
 - **Sub-agent dispatch** *(coming v0.4)* — natural-language *"launch a Claude
   Opus agent to refactor my Shopify cron"* → spawned in sandbox → streams
   back into the chat
