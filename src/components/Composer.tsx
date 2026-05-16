@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Send, Mic, Paperclip, StopCircle, Sparkles, Cloud, ChevronUp, Globe, Image as ImageIcon, Slash,
+  Send, Mic, Paperclip, StopCircle, Sparkles, Cloud, ChevronUp, Globe, Image as ImageIcon, Slash, Monitor,
 } from 'lucide-react';
 import {
   useStore, setComposer, sendUserMessage, stopGenerating, patchSettings, selectActive,
@@ -86,6 +86,23 @@ export function Composer() {
               className="flex-1 resize-none bg-transparent outline-none px-2 py-2 text-[15px] placeholder:text-muted-foreground/60 max-h-[200px] leading-relaxed"
             />
             <button aria-label="Voice" className="btn-icon"><Mic size={15} /></button>
+            {/* Hand off to Destiny Computer — opens the right-pane VNC view
+                and queues the current message as a hint for the operator.
+                When the backend `nandai-computer` MCP server lands (v0.4
+                per roadmap), this same button will spawn an autonomous
+                manus_computer loop with the convo context. For now it's
+                the human-driven path: open the pane, see the desktop,
+                drive it yourself. */}
+            <button
+              aria-label="Hand off to Computer"
+              className="btn-icon"
+              title="Open the Computer pane (⌘\\) — hand this turn to the live desktop"
+              onClick={() => {
+                window.dispatchEvent(new CustomEvent('atelier:open-computer'));
+              }}
+            >
+              <Monitor size={15} />
+            </button>
             {streaming
               ? <button onClick={stopGenerating} aria-label="Stop"
                   className="h-9 w-9 rounded-md border border-red-500/30 text-red-500 hover:bg-red-500/10 inline-flex items-center justify-center transition-colors">

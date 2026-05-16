@@ -31,6 +31,15 @@ function App() {
     () => loadComputerConfig().autoOpen
   );
 
+  // Listen for `atelier:open-computer` events fired by the Composer's
+  // "Hand off to Computer" button. Decoupled via CustomEvent so the
+  // Composer doesn't need a prop-drilled callback or context.
+  useEffect(() => {
+    const handler = () => setComputerOpen(true);
+    window.addEventListener('atelier:open-computer', handler);
+    return () => window.removeEventListener('atelier:open-computer', handler);
+  }, []);
+
   // D-A11Y-005: honour OS preference too, OR explicit user setting.
   const reduceMotionSystem = useMemo(() => {
     if (typeof window === 'undefined' || !window.matchMedia) return false;
