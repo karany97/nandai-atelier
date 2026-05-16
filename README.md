@@ -2,15 +2,17 @@
 
 # Destiny Atelier
 
-### Three brains vote on every answer.<br/>Local. Single file. 108 tools.
+### The chat surface of an AI ecosystem you run your business on.<br/>Local. Single file. 108 tools. Bug-free or it doesn't ship.
 
-[![Bundle size](https://img.shields.io/badge/bundle-540%20KB-c2410c)](./bundle.html)
+[![Bundle size](https://img.shields.io/badge/bundle-542%20KB-c2410c)](./bundle.html)
 [![License: MIT](https://img.shields.io/badge/license-MIT-22c55e)](./LICENSE)
 [![Build journal](https://img.shields.io/badge/build%20journal-18%20ticks-eab308)](./journal/)
 [![Live demo](https://img.shields.io/badge/demo-atelier.nandai.org-0f766e)](https://atelier.nandai.org)
-[![Roadmap](https://img.shields.io/badge/roadmap-v0.2-3b82f6)](./ROADMAP.md)
+[![Companion: Destiny Computer](https://img.shields.io/badge/companion-Destiny%20Computer-7c3aed)](https://github.com/karany97/destiny-computer)
 
-**A Claude-Code-class AI chat that runs entirely on your own hardware.**
+**Atelier is one window into an ecosystem where AI lives, works 24/7,
+owns its own computer, and operates without your data leaving the
+network.** We run our Indian jewelry e-commerce company on it.
 
 ![Atelier — live reply streaming from the local Trinity](./docs/screenshots/03_nandai_live_reply.png)
 
@@ -18,12 +20,31 @@
 
 ---
 
-Destiny Atelier is one 540 KB HTML file. (Just *"Atelier"* is fine in short form — like how *"Claude"* is short for *"Anthropic Claude"*.) Open it, point it at any OpenAI-shape LLM
-gateway, and you get a chat surface that matches Claude.ai for density and
-keyboard rhythm — but every answer is **voted on by three local models**
-(a fast 27B, a thinking 36B, and a tool-specialist 8B), audited turn-by-turn
-by a separate Sentinel daemon, persisted to IndexedDB with cross-tab sync,
-and able to escalate to Anthropic Opus when the local consensus is uncertain.
+Destiny Atelier is one 540 KB HTML file — the chat window. Open it,
+point it at any OpenAI-shape LLM gateway, and you get a Claude.ai-density
+chat surface where every reasoning answer is **voted on by three local
+models** (a fast 27B, a thinking 36B, and a tool-specialist 8B), audited
+turn-by-turn by a separate Sentinel daemon (8 axes, 12 s budget), persisted
+to IndexedDB with cross-tab sync, and able to escalate to Anthropic Opus
+when the local consensus is uncertain.
+
+The chat is one part of the picture. The right pane embeds a live
+[KasmVNC Linux desktop the AI drives](https://github.com/karany97/destiny-computer)
+— type a goal, watch it click, step records stream back. The mythos-gate
+in front of the bundle injects the master key server-side so no secret
+ever lives in the browser. The Sentinel verdict means we ship zero
+hallucinated answers — and the videos at
+[YouTube/TikTok/etc.] are us proving it on real bugs other people
+haven't fixed.
+
+If you want a chat app, [LibreChat](https://github.com/danny-avila/LibreChat)
+and [Open WebUI](https://github.com/open-webui/open-webui) are great.
+If you want the AI equivalent of an employee who shows up at your office,
+uses your desktop, audits its own work, and never sends a packet outside
+your LAN — this is the front of that. The README below covers atelier
+in depth; for the rest of the ecosystem (per-employee desktops, tool
+fleet, observability, network adoption), see
+[`docs/ECOSYSTEM.md`](./docs/ECOSYSTEM.md).
 
 ```
                     ┌──── Qwen 3.6-27B ─────┐
