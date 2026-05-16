@@ -3,8 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "name_humanized": "Nandai Atelier",
-  "description": "Single-file Claude-Code-class AI chat. Three local brains vote on every answer. 108 MCP tools. Runs on your own hardware.",
+  "name_humanized": "Destiny Atelier",
+  "description": "Destiny Atelier — single-file Claude-Code-class local AI chat. Three brains vote on every answer. 108 MCP tools. Local LLM. Local Claude alternative. Runs on your own hardware.",
   "homepage": "https://atelier.nandai.org",
   "repository": {
     "type": "git",

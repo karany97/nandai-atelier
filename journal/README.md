@@ -1,5 +1,12 @@
 # Build journal — 18 ticks, one night
 
+> **Naming note**: this project is now called **Destiny Atelier**. The
+> journal entries below (HANDOFF-001 → HANDOFF-018) were written on the
+> overnight of May 15→16, 2026 when the product was still called
+> *Nandai Atelier*. The chronicle is kept verbatim for historical fidelity
+> — re-writing it would erase the trail. New journal entries from May 16
+> forward use the *Destiny Atelier* name. Same product, sharper brand.
+
 This folder is the raw chronicle of how the chat got built. Each `HANDOFF-NNN.md`
 is one "tick" — one feature, one fix, one ship, one verify, written immediately
 after the work landed so the next tick had a working baseline to read from.

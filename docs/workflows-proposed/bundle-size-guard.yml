@@ -1,0 +1,130 @@
+# Proposed CI workflow — NOT YET ENABLED
+#
+# Why this file lives at docs/workflows-proposed/ (not .github/workflows/):
+# the gh CLI token used to commit the brand rename doesn't have the
+# `workflow` scope. GitHub's API enforces that scope for any path under
+# .github/workflows/, blocking both git push AND REST PUT. Fix:
+#
+#   gh auth refresh -s workflow
+#   git mv docs/workflows-proposed/bundle-size-guard.yml .github/workflows/
+#   git add -A && git commit -m 'ci: enable bundle-size guard' && git push
+#
+# After that one user-side command, this workflow runs on every PR
+# and asserts the single-file artifact stays operator-grade small.
+#
+# What it checks:
+#   1. `pnpm install` works on a clean Ubuntu runner
+#   2. `pnpm run bundle` succeeds
+#   3. The produced `bundle.html` is < 600 KB (HARD FAIL)
+#   4. The compressed size is < 200 KB (HARD FAIL — gzip = real network cost)
+#   5. The bundle still contains the three __BAKED_*__ sentinels in source
+#      form (so the deploy script's sed will work)
+
+name: Bundle size guard
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'inline.mjs'
+      - 'vite.config.ts'
+      - 'index.html'
+      - '.github/workflows/bundle-size-guard.yml'
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'inline.mjs'
+
+jobs:
+  bundle-size:
+    name: bundle.html < 600 KB
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Build the bundle
+        run: pnpm run bundle
+
+      - name: Check bundle.html exists
+        run: |
+          test -f bundle.html
+          ls -la bundle.html
+
+      - name: Assert bundle size under 600 KB
+        run: |
+          SIZE=$(wc -c < bundle.html | tr -d ' ')
+          KB=$((SIZE / 1024))
+          echo "bundle.html = ${KB} KB (${SIZE} bytes)"
+          if [ "$SIZE" -gt 614400 ]; then
+            echo "::error::bundle.html is ${KB} KB — exceeds 600 KB ceiling"
+            echo "::error::See ROADMAP.md and the README's 'single-file constraint' rationale."
+            exit 1
+          fi
+
+      - name: Assert gzip size under 200 KB
+        run: |
+          GZ_SIZE=$(gzip -c bundle.html | wc -c | tr -d ' ')
+          GZ_KB=$((GZ_SIZE / 1024))
+          echo "bundle.html.gz = ${GZ_KB} KB (${GZ_SIZE} bytes)"
+          if [ "$GZ_SIZE" -gt 204800 ]; then
+            echo "::error::Compressed bundle.html is ${GZ_KB} KB — exceeds 200 KB ceiling"
+            exit 1
+          fi
+
+      - name: Assert sentinels survive minification
+        run: |
+          for n in __BAKED_BASE_URL__ __BAKED_API_KEY__ __BAKED_TOOLS_URL__; do
+            COUNT=$(grep -c "$n" bundle.html || true)
+            if [ "$COUNT" -ne 1 ]; then
+              echo "::error::Sentinel $n appears $COUNT times in bundle.html — expected exactly 1"
+              echo "::error::The deploy script's sed won't work if this drifts. See src/lib/connect.ts."
+              exit 1
+            fi
+          done
+          echo "All three __BAKED_*__ sentinels present exactly once."
+
+      - name: Assert no secrets leaked
+        run: |
+          # Strings that should NEVER appear in a published bundle
+          for leak in 'sk-1234' 'sk-ant-' 'shpat_' 'nandaijeweller' 'process.env.SHOPIFY'; do
+            COUNT=$(grep -c "$leak" bundle.html || true)
+            if [ "$COUNT" -gt 0 ]; then
+              echo "::error::Secret pattern '$leak' appears $COUNT times in bundle.html"
+              exit 1
+            fi
+          done
+          echo "No known secret patterns in bundle."
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "### Bundle size report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Value | Limit |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|---|" >> $GITHUB_STEP_SUMMARY
+          SIZE=$(wc -c < bundle.html | tr -d ' ')
+          GZ_SIZE=$(gzip -c bundle.html | wc -c | tr -d ' ')
+          echo "| Bundle size | $((SIZE / 1024)) KB | 600 KB |" >> $GITHUB_STEP_SUMMARY
+          echo "| Gzip size | $((GZ_SIZE / 1024)) KB | 200 KB |" >> $GITHUB_STEP_SUMMARY

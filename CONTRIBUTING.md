@@ -1,4 +1,4 @@
-# Contributing to Nandai Atelier
+# Contributing to Destiny Atelier
 
 > First, thanks. This started as one operator's overnight side-project and
 > the only reason it's getting a public README at all is that other operators
@@ -7,7 +7,7 @@
 
 ## The thing you must read before opening a PR
 
-Atelier is a **single-file artifact**. Source lives in `src/`, but what ships
+Destiny Atelier is a **single-file artifact**. Source lives in `src/`, but what ships
 is a 537 KB self-contained `bundle.html`. Two consequences:
 
 1. **No runtime deps allowed.** No CDN scripts, no remote font loads, no

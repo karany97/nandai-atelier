@@ -1,6 +1,6 @@
 <div align="center">
 
-# Nandai Atelier
+# Destiny Atelier
 
 ### Three brains vote on every answer.<br/>Local. Single file. 108 tools.
 
@@ -18,7 +18,7 @@
 
 ---
 
-Atelier is one 540 KB HTML file. Open it, point it at any OpenAI-shape LLM
+Destiny Atelier is one 540 KB HTML file. (Just *"Atelier"* is fine in short form — like how *"Claude"* is short for *"Anthropic Claude"*.) Open it, point it at any OpenAI-shape LLM
 gateway, and you get a chat surface that matches Claude.ai for density and
 keyboard rhythm — but every answer is **voted on by three local models**
 (a fast 27B, a thinking 36B, and a tool-specialist 8B), audited turn-by-turn
@@ -77,6 +77,13 @@ data never leaves your LAN.
 
 A single 540 KB HTML file that, when served behind a thin auth proxy and an
 OpenAI-compatible LLM gateway, gives you:
+
+> **Naming**: this software is **Destiny Atelier**. *Destiny* is the brand under which the
+> project ships open-source AI products (the same way *Anthropic* ships *Claude*
+> and *OpenAI* ships *GPT*). When the context is unambiguous, *"Atelier"* alone
+> is fine. The GitHub repo lives at `karany97/nandai-atelier` for star + URL
+> continuity with the v0.1 release; the product name on the homepage, the
+> bundle's `<title>`, and the systemd unit is *Destiny Atelier*.
 
 - **Multi-LLM routing** — local Trinity (Qwen 3.6-27B *fast*, Hermes 4.3-36B
   *think*, ToolACE-2-8B *tool*) via [LiteLLM](https://github.com/BerriAI/litellm);

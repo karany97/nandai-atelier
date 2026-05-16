@@ -1,6 +1,6 @@
 # Roadmap
 
-Where Atelier is going. Updated weekly when something ships or a plan flips.
+Where Destiny Atelier is going. Updated weekly when something ships or a plan flips.
 
 **Legend**: ✅ shipped · 🚧 in-flight · 📋 next · 💭 considering · ❌ explicitly out-of-scope
 

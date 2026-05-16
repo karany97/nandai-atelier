@@ -126,7 +126,7 @@ const DEFAULT_SETTINGS: Settings = {
   theme: 'light',
   routeMode: 'nandai',
   systemPrompt:
-    'You are the Nandai Atelier on the Trinity stack. Answer with substance, cite sources when ' +
+    'You are Destiny Atelier on the Trinity stack. Answer with substance, cite sources when ' +
     'reasoning, and prefer code or JSON artifacts over long prose. ' +
     // Added 2026-05-16 post-overnight: Qwen 3.6 was emitting tool_calls then ' +
     // refusing to narrate the result. This explicit rule fixes the empty-' +
