@@ -34,7 +34,7 @@ Screenshot: `15_tool_narrated.png` (saved in this folder).
 
 ## Bundle delta
 
-- MD5: `55321439fa8a16bb873b0e78871dc531` (local & .213 match)
+- MD5: `55321439fa8a16bb873b0e78871dc531` (local & infra-host match)
 - Size: 511,196 bytes (≈ +119 bytes net over tick-001 — adds the sidebar tools chip + the auto-escalate gate + the log relocate)
 - Public surfaces unchanged: `atelier.nandai.org` 302→PIN, `tools.nandai.org/health` 200.
 

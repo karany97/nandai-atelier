@@ -54,7 +54,7 @@ This tick closes that gap.
 
 ## End-to-end proof
 
-Method: Playwright on `atelier.nandai.org` after PIN-1971.
+Method: Playwright on `atelier.nandai.org` after the PIN gate.
 
 Starting state (carryover from tick-004 + tick-005):
 - IDB: 2 convs ("Tokyo" + "London" tool-call turns)
@@ -75,7 +75,7 @@ useful as a fixture for tests).
 
 ## Bundle delta
 
-- MD5: `a18465c00770b664afe75ad32dcc428e` (local & .213 match)
+- MD5: `a18465c00770b664afe75ad32dcc428e` (local & infra-host match)
 - Size: 525 KB single-file (+5 KB over tick-005 — adds the 3 store
   actions + the DataManagementPanel component + 3 Lucide icons)
 - gzip: 143 KB

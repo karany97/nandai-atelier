@@ -67,7 +67,7 @@ Screenshot: `20_refocus_refetch_verified.png`.
 During this tick `(internal-lan)` was unreachable from the Mac over LAN
 (ping 100 % loss, SSH timeout). Cloudflare tunnels stayed healthy
 (atelier returns 302, tools returns 405 on GET), so the box itself
-is up — the 10.179.1.0/24 segment is the problem (probably a router
+is up — the the internal-LAN segment (RFC-1918) segment is the problem (probably a router
 event on the Mac side).
 
 Fallback path used: Tailscale's `infra-host` (Tailscale IP
@@ -81,7 +81,7 @@ to `(internal-tailscale)` when `(internal-lan)` SSH errors out.
 
 ## Bundle delta
 
-- MD5: `9a975d069a0ef0d84402bec522492c0a` (local & .213 match)
+- MD5: `9a975d069a0ef0d84402bec522492c0a` (local & infra-host match)
 - Size: 525 KB single-file (no measurable delta over tick-006 — the
   refocus block compresses well alongside the existing AuditPill code)
 - gzip: 143 KB
@@ -96,7 +96,7 @@ to `(internal-tailscale)` when `(internal-lan)` SSH errors out.
 | tool-executor.service | active (running) |
 | sentinel.service | active (running) |
 | atelier-static.service | active (running, restarted via Tailscale path) |
-| LAN 10.179.1.0/24 reachability from Mac | DOWN (this tick worked around it) |
+| LAN the internal-LAN segment (RFC-1918) reachability from Mac | DOWN (this tick worked around it) |
 | Tailscale `infra-host` ((internal-tailscale)) | online |
 | All tick-004 / 005 / 006 features | intact, no regression |
 

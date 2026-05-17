@@ -50,7 +50,7 @@ all stubbed. The first real run is blocked on:
       `duckduckgo`, `firecrawl`, `fetch` reliably during the bench)
 - [ ] Bench harness wired to atelier's `/api/llm` endpoint (so it runs
       against the real Trinity, not a mocked LLM)
-- [ ] A quiet 90-minute window on Titan .50 (the bench shells out to the
+- [ ] A quiet 90-minute window on our dual-3090 box (the bench shells out to the
       live brains; concurrent live chat would interfere)
 
 ## Recipe (when ready)

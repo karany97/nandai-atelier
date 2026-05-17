@@ -359,7 +359,7 @@ export function brainToModel(brain: BrainKey | 'auto'): string {
   // `auto` route — the "ModernBERT classifier pre_call hook" was a planned
   // feature that hasn't shipped. Live calls with model='auto' return
   // `404 The model 'auto' does not exist.` and the user sees "Stream
-  // failed." Until a real router lands at .213, target `nandai-fast`
+  // failed." Until a real router lands, target `nandai-fast`
   // (Qwen 3.6-27B AWQ on Titan GPU 0) by default — it's the fastest
   // healthy route with tool-calling. Future router: insert here, keep
   // the caller signature stable.

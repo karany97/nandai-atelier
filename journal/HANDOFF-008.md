@@ -37,7 +37,7 @@ Three files changed, ~95 LOC total:
 
 ## End-to-end proof
 
-Method: Playwright on `atelier.nandai.org` after PIN-1971.
+Method: Playwright on `atelier.nandai.org` after the PIN gate.
 
 | Stage | Outcome |
 |---|---|
@@ -72,7 +72,7 @@ succeeded. That requires `escalateToOpus` to return a boolean
 
 ## Bundle delta
 
-- MD5: `29db6f82be3ad95dafbc2d705d76d8f5` (local & .213 match)
+- MD5: `29db6f82be3ad95dafbc2d705d76d8f5` (local & infra-host match)
 - Size: 528 KB single-file (+3 KB over tick-007 — adds the
   Telemetry type, load/save/reset helpers, EscalationMetrics
   component, RealKpi sub-component)
@@ -86,7 +86,7 @@ succeeded. That requires `escalateToOpus` to return a boolean
 | atelier.nandai.org | 302 → PIN, 200 after auth |
 | tools.nandai.org/health | 200, n_tools=108 |
 | atelier-static.service | active (restarted via Tailscale path) |
-| LAN 10.179.1.0/24 → .213 from Mac | STILL DOWN (deploy used Tailscale `(internal-tailscale)` again) |
+| LAN the internal-LAN segment (RFC-1918) → (internal-lan) from Mac | STILL DOWN (deploy used Tailscale `(internal-tailscale)` again) |
 | Tailscale `infra-host` | online |
 | Telemetry persistence (set 7/3, refresh, render) | verified |
 | All earlier tick features (auto-escalate, refocus, persistence) | intact, no regression |
@@ -111,7 +111,7 @@ From HANDOFF-007 plus new this tick:
 | 21 | BroadcastChannel for AuditPill refetch (one tab pulls verdict → broadcast to others) | S |
 | 22 | **NEW**: `escalateToOpus` returns bool, AuditPill sets `autoTriggered` only on success | S |
 | 23 | **NEW**: telemetry CSV export — let Karan pull counters into a spreadsheet for trend analysis | S |
-| 24 | **NEW**: investigate LAN 10.179.1.0/24 break (.213 unreachable for 2+ hours via LAN; Tailscale fine) | M |
+| 24 | **NEW**: investigate LAN the internal-LAN segment (RFC-1918) break ((internal-lan) unreachable for 2+ hours via LAN; Tailscale fine) | M |
 
 ## Recommended next-tick first action
 

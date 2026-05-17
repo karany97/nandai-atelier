@@ -71,13 +71,13 @@ Passes the new `alreadyReran={!!msg.reranWithTools}` prop to AuditPill.
 
 ## End-to-end proof
 
-Method: Playwright on `atelier.nandai.org` after PIN-1971.
+Method: Playwright on `atelier.nandai.org` after the PIN gate.
 
 | Stage | Outcome |
 |---|---|
 | Reset telemetry, point connection at public `https://tools.nandai.org`, reload | Sidebar shows "Tools: 108 loaded" — real tools from live mcpo through Cloudflare tunnel; `toolBridgeStatus.kind === 'ready'` |
 | Install fetch-mock that makes `/sentinel/{id}` return `suggested_action: 'rerun_with_tools'` | mock live |
-| Send "Tick-011 sentinel rerun-with-tools test." | Scripted-fallback assistant reply renders (LAN to .213:8008 still down, so live gateway probe failed — but `toolBridgeStatus` is independent and stays ready) |
+| Send "Tick-011 sentinel rerun-with-tools test." | Scripted-fallback assistant reply renders (LAN to (internal-host):8008 still down, so live gateway probe failed — but `toolBridgeStatus` is independent and stays ready) |
 | Wait 15 s for the t=8s sentinel poll + 400 ms dispatch delay | |
 | Inspect surfaces | `has_rerun_chip: true`, `has_auto_chip: false`, `telemetry.rerunsWithTools: 1`, `escalationsManual: 0`, `escalationsAuto: 0`, **chip_and_counter_agree: true** |
 | Open Trinity dashboard | Sentinel actions row renders 4 tiles: Manual=0, Auto-escalate=0, **Rerun-with-tools=1**, Total=1, since today |
@@ -105,7 +105,7 @@ require human judgment that we don't want to second-guess.
 
 ## Bundle delta
 
-- MD5: `d41854719aff4ce87c5fabd0d7c06fcd` (local & .213 match)
+- MD5: `d41854719aff4ce87c5fabd0d7c06fcd` (local & infra-host match)
 - Size: 531 KB (+2 KB over tick-010 — new action + new chip + 4th
   dashboard tile + telemetry field + type change)
 - gzip: 145 KB
@@ -118,7 +118,7 @@ require human judgment that we don't want to second-guess.
 | atelier.nandai.org | 302 → PIN, 200 after auth |
 | tools.nandai.org/health | 200, n_tools=108 |
 | atelier-static.service | active (restarted via Tailscale) |
-| LAN 10.179.1.0/24 → .213 | STILL DOWN (5 ticks now; issue #24 has aged into chronic) |
+| LAN the internal-LAN segment (RFC-1918) → (internal-lan) | STILL DOWN (5 ticks now; issue #24 has aged into chronic) |
 | Tailscale `infra-host` | online |
 | All earlier tick features (persistence, auto-escalate, refocus, retry-hint) | intact, no regression |
 
@@ -139,7 +139,7 @@ From HANDOFF-010 minus #14 (now closed):
 | 20 | Deploy scripts auto-prefer Tailscale on LAN failure | S |
 | 21 | BroadcastChannel for AuditPill refetch | S |
 | 23 | Telemetry CSV export | S |
-| 24 | LAN .213 unreachable (5+ hours now) | M |
+| 24 | LAN (internal-lan) unreachable (5+ hours now) | M |
 | 25 | Telemetry for tool-error retry recovery rate | S |
 | 26 | Surface retry hint visually in tool-call card | S |
 | 27 | **NEW**: success-rate for rerun-with-tools — track whether the second pass actually called a tool or hallucinated again. Needs a callback from `runLiveCompletion(forceTools)` back into telemetry on completion. | S |

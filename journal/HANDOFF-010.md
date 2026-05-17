@@ -69,11 +69,11 @@ template-literal identifier; runtime substitution is unaffected.)
 
 ### Step 2 — no regression on the happy path
 
-Playwright drove `atelier.nandai.org` after PIN-1971:
+Playwright drove `atelier.nandai.org` after the PIN gate:
 
 | Step | Outcome |
 |---|---|
-| Boot, send "Tick-010 sanity — chat still works after code change." | Assistant replied via scripted fallback (LAN to .213:8008 still down) |
+| Boot, send "Tick-010 sanity — chat still works after code change." | Assistant replied via scripted fallback (LAN to (internal-host):8008 still down) |
 | Inspect IDB | New conv saved, total IDB count = 6 (carries Tokyo + London + earlier ticks' fixtures intact) |
 | Inspect body text | Assistant text rendered, 4305 chars in body, no error toasts |
 | Existing tick-004..009 features | All operating cleanly |
@@ -122,7 +122,7 @@ unrecoverable.
 
 ## Bundle delta
 
-- MD5: `02435954dc2add34c59b4615027565d9` (local & .213 match)
+- MD5: `02435954dc2add34c59b4615027565d9` (local & infra-host match)
 - Size: 529 KB (+1 KB over tick-009 — the three hint string variants
   plus the branching logic)
 - gzip: 144 KB
@@ -135,7 +135,7 @@ unrecoverable.
 | atelier.nandai.org | 302 → PIN, 200 after auth |
 | tools.nandai.org/health | 200, n_tools=108 |
 | atelier-static.service | active (restarted via Tailscale) |
-| LAN 10.179.1.0/24 → .213 | STILL DOWN (4 ticks now; issue #24 escalating) |
+| LAN the internal-LAN segment (RFC-1918) → (internal-lan) | STILL DOWN (4 ticks now; issue #24 escalating) |
 | Tailscale `infra-host` | online |
 | All earlier tick features | intact, no regression |
 | Total IDB conversations accumulated across all ticks | 6 (Tokyo / London / etc) |
@@ -158,7 +158,7 @@ From HANDOFF-009 minus #7 (now closed):
 | 20 | Deploy scripts auto-prefer Tailscale on LAN failure | S |
 | 21 | BroadcastChannel for AuditPill refetch | S |
 | 23 | Telemetry CSV export | S |
-| 24 | **ESCALATING**: LAN .213 unreachable for 4+ hours via LAN; Tailscale fine. Worth a real network triage at the router rather than just routing around it. | M |
+| 24 | **ESCALATING**: LAN (internal-lan) unreachable for 4+ hours via LAN; Tailscale fine. Worth a real network triage at the router rather than just routing around it. | M |
 | 25 | **NEW**: telemetry for tool-error retries — count how often the new mixed/all-fail hints actually get the model to recover successfully. Useful for tuning the hint wording. | S |
 | 26 | **NEW**: surface the retry hint visually in the tool-call card so the operator can see which round was a retry. Tiny chip like the AuditPill's "auto-escalated". | S |
 

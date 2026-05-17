@@ -51,7 +51,7 @@ the user sees the warning before LRU silently drops anything.
 
 ## End-to-end proof
 
-Method: Playwright on `atelier.nandai.org` after PIN-1971.
+Method: Playwright on `atelier.nandai.org` after the PIN gate.
 
 | Step | Outcome |
 |---|---|
@@ -86,7 +86,7 @@ Starting from 220 stored:
 
 ## Bundle delta
 
-- MD5: `fc42250520c0b40e790f9d8db11b4f5d` (local & .213 match)
+- MD5: `fc42250520c0b40e790f9d8db11b4f5d` (local & infra-host match)
 - Size: 532 KB (+1 KB over tick-011 — enforceCap + getStorageStats
   + the storage-line in Settings)
 - gzip: 145 KB
@@ -99,7 +99,7 @@ Starting from 220 stored:
 | atelier.nandai.org | 302 → PIN, 200 after auth |
 | tools.nandai.org/health | 200, n_tools=108 |
 | atelier-static.service | active (restarted via Tailscale, 6th tick in a row) |
-| LAN 10.179.1.0/24 → .213 | STILL DOWN (chronic — issue #24) |
+| LAN the internal-LAN segment (RFC-1918) → (internal-lan) | STILL DOWN (chronic — issue #24) |
 | Tailscale `infra-host` | online |
 | IDB total convs post-cleanup | back to ~6 (tick-010 baseline) |
 | All tick-004..011 features | intact, no regression |
@@ -120,7 +120,7 @@ From HANDOFF-011 minus #11 (now closed):
 | 20 | Deploy scripts auto-prefer Tailscale on LAN failure | S |
 | 21 | BroadcastChannel for AuditPill refetch | S |
 | 23 | Telemetry CSV export | S |
-| 24 | LAN .213 unreachable (6+ hours) | M |
+| 24 | LAN (internal-lan) unreachable (6+ hours) | M |
 | 25 | Telemetry for tool-error retry recovery rate | S |
 | 26 | Surface retry hint visually in tool-call card | S |
 | 27 | Success-rate for rerun-with-tools | S |

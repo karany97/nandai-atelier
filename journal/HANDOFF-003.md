@@ -40,7 +40,7 @@ That's the observability promise delivered. No fabrication, no theater — every
 
 ## Bundle delta
 
-- MD5: `ceef7fcb87801156a61eeb9eafe182c2` (local & .213 match)
+- MD5: `ceef7fcb87801156a61eeb9eafe182c2` (local & infra-host match)
 - Size: 515 KB single-file (+4 KB over tick-002 — adds the AuditPill component + the fetch helper + the import in Message)
 - gzip 141 KB
 

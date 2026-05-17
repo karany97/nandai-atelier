@@ -59,7 +59,7 @@ Screenshot: `22_chip_counter_agree.png`.
 
 ## Bundle delta
 
-- MD5: `f5be34e8feadedc7ff64ba497aae4902` (local & .213 match)
+- MD5: `f5be34e8feadedc7ff64ba497aae4902` (local & infra-host match)
 - Size: 528 KB (effectively unchanged from tick-008; +20 bytes
   for the new boolean return value and the moved setAutoTriggered
   call)
@@ -73,7 +73,7 @@ Screenshot: `22_chip_counter_agree.png`.
 | atelier.nandai.org | 302 → PIN, 200 after auth |
 | tools.nandai.org/health | 200, n_tools=108 |
 | atelier-static.service | active (restarted via Tailscale) |
-| LAN 10.179.1.0/24 → .213 | STILL DOWN (issue #24 — third tick in a row using Tailscale fallback) |
+| LAN the internal-LAN segment (RFC-1918) → (internal-lan) | STILL DOWN (issue #24 — third tick in a row using Tailscale fallback) |
 | Tailscale `infra-host` ((internal-tailscale)) | online |
 | Tick-005..008 features | intact, no regression |
 
@@ -96,7 +96,7 @@ From HANDOFF-008 minus #22 (now closed):
 | 20 | Deploy scripts auto-prefer Tailscale on LAN failure | S |
 | 21 | BroadcastChannel for AuditPill refetch | S |
 | 23 | Telemetry CSV export | S |
-| 24 | Investigate LAN .213 unreachable for 3+ hours via LAN; Tailscale fine | M |
+| 24 | Investigate LAN (internal-lan) unreachable for 3+ hours via LAN; Tailscale fine | M |
 
 ## Recommended next-tick first action
 

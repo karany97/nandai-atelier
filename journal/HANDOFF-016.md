@@ -114,7 +114,7 @@ problem in the SAVE-SYNC path, not the verdict-cache path.
 
 ## Bundle delta
 
-- MD5: `882671cb9aaf5cb992c32494c7224bbf` (local & .213 match)
+- MD5: `882671cb9aaf5cb992c32494c7224bbf` (local & infra-host match)
 - Size: 535 KB (+1 KB over tick-015b — Map declaration + cache helpers + lazy init)
 - gzip: 146 KB
 
@@ -126,7 +126,7 @@ problem in the SAVE-SYNC path, not the verdict-cache path.
 | atelier.nandai.org | 302 → PIN, 200 after auth |
 | tools.nandai.org/health | 200, n_tools=108 |
 | atelier-static.service | active |
-| LAN 10.179.1.0/24 → .213 | STILL DOWN (10th tick — chronic) |
+| LAN the internal-LAN segment (RFC-1918) → (internal-lan) | STILL DOWN (10th tick — chronic) |
 | Tailscale `infra-host` | online |
 | Cross-tab save/delete/clear (tick-014) | wired; streaming-state divergence bug found (issue #35) |
 | Cross-tab verdict broadcast (tick-015) | wired; protocol-verified |
@@ -145,7 +145,7 @@ From HANDOFF-015 minus #34 (now closed):
 | 18 | Progress bar for big imports | S |
 | 19 | Confirm-by-typing for "Clear all" | S |
 | 23 | Telemetry CSV export | S |
-| 24 | LAN .213 unreachable (10+ hours, chronic) | M |
+| 24 | LAN (internal-lan) unreachable (10+ hours, chronic) | M |
 | 25 | Telemetry for tool-error retry recovery rate | S |
 | 26 | Surface retry hint visually in tool-call card | S |
 | 27 | Success-rate for rerun-with-tools | S |

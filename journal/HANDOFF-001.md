@@ -3,7 +3,7 @@
 
 ## Shipped
 
-1. **`/log-turn` endpoint added to tool-executor** (140 LOC clean patch via local-file scp after 2 botched in-place sed attempts; lesson: don't heredoc-edit production code over SSH, use rsync+real-file patches). Endpoint validates required schema fields, appends to `$HOME/NandaiJarvis/logs/chat-turns.jsonl`, returns 204. Public via `https://tools.nandai.org/log-turn`.
+1. **`/log-turn` endpoint added to tool-executor** (140 LOC clean patch via local-file scp after 2 botched in-place sed attempts; lesson: don't heredoc-edit production code over SSH, use rsync+real-file patches). Endpoint validates required schema fields, appends to `$HOME/services/log-store/chat-turns.jsonl`, returns 204. Public via `https://tools.nandai.org/log-turn`.
 
 2. **Chat wired to POST every completed turn**. `lib/tool-bridge.ts:logChatTurn` (fire-and-forget, keepalive). Called from `runLiveCompletion` after final patch, before tool-loop branch. Captures id, ts, session, user_prompt, model_response, brain_route, tool_calls, latency, tokens.
 
@@ -25,7 +25,7 @@ This is the constant-crawl agent doing exactly what it's supposed to: catching t
 
 ## Failures encountered + how I recovered
 
-- **SSH heredoc python mangling** (twice): edits via `ssh operator@.213 'python3 <<EOF ... EOF'` broke source files when backticks or escaped quotes were involved. Recovery: rsync clean source + apply patch via real .py file scp'd to /tmp/, then ssh-execute. **Lesson for next tick**: never edit production source via inline heredoc; always patch-file → scp → execute.
+- **SSH heredoc python mangling** (twice): edits via `ssh operator@(internal-lan) 'python3 <<EOF ... EOF'` broke source files when backticks or escaped quotes were involved. Recovery: rsync clean source + apply patch via real .py file scp'd to /tmp/, then ssh-execute. **Lesson for next tick**: never edit production source via inline heredoc; always patch-file → scp → execute.
 - **tool-executor crashed twice on syntax error** before clean rsync restore. Recovery time: ~3 min each. Acceptable since systemd auto-restarts and the chat fails-soft when /tools is down.
 
 ## Open issues for next tick

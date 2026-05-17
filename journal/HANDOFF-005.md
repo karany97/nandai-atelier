@@ -46,7 +46,7 @@ Opus reply just appeared underneath.
 ## End-to-end proof
 
 Method: Playwright on the live `atelier.nandai.org` bundle after
-PIN-1971. Since the real sentinel hasn't flagged `escalate_to_opus`
+PIN. Since the real sentinel hasn't flagged `escalate_to_opus`
 since the tick-002 narration fix (the sentinel correctly returns
 `action: none` for properly-narrated turns), I installed a thin
 fetch-mock to simulate two endpoints:
@@ -101,7 +101,7 @@ auto-dispatch — they require dedicated handlers (issues #7, #14).
 
 ## Bundle delta
 
-- MD5: `70994741cdcbf6c26aec7503055173e2` (local & .213 match)
+- MD5: `70994741cdcbf6c26aec7503055173e2` (local & infra-host match)
 - Size: 520 KB single-file (+1 KB over tick-004 — adds the
   useEffect, the chip, and the optional `reason` param)
 - gzip: 142 KB
@@ -136,7 +136,7 @@ From HANDOFF-004 plus new this tick:
 | 13 | Cross-tab IDB sync via `BroadcastChannel('nandai-chat:sync')` | M |
 | 14 | **NEW**: handle `suggested_action: rerun_with_tools` — pull the existing tool list, re-fire the same prompt with `tool_choice: 'required'`, surface result | M |
 | 15 | **NEW**: telemetry counter for sentinel-auto-escalations vs manual ones — useful for tuning the sentinel's threshold | S |
-| 16 | **NEW**: Opus bridge actually run on the .213 box (launchctl / systemd unit) so auto-escalation lands real Opus replies, not just dispatches into the void | M |
+| 16 | **NEW**: Opus bridge actually run on the infra host (launchctl / systemd unit) so auto-escalation lands real Opus replies, not just dispatches into the void | M |
 
 ## Recommended next-tick first action
 

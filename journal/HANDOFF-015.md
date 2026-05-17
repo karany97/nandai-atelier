@@ -110,7 +110,7 @@ iteration.
 
 ## Bundle delta
 
-- MD5: `1bae06edee77c4d9ce9d736ee2e998f9` (local & .213 match)
+- MD5: `1bae06edee77c4d9ce9d736ee2e998f9` (local & infra-host match)
 - Size: 534 KB (+1 KB over tick-014 — the verdict op + 2 helper
   functions + 1 receive useEffect + 1 verdictRef sync effect)
 - gzip: 146 KB
@@ -123,7 +123,7 @@ iteration.
 | atelier.nandai.org | 302 → PIN, 200 after auth |
 | tools.nandai.org/health | 200, n_tools=108 |
 | atelier-static.service | active (restarted twice this tick via helper) |
-| LAN 10.179.1.0/24 → .213 | STILL DOWN (9th tick now — chronic) |
+| LAN the internal-LAN segment (RFC-1918) → (internal-lan) | STILL DOWN (9th tick now — chronic) |
 | Tailscale `infra-host` | online |
 | Cross-tab save/delete/clear sync (tick-014) | intact |
 | Cross-tab verdict sync (this tick) | wired, protocol-verified |
@@ -142,7 +142,7 @@ From HANDOFF-014 minus #21 (now closed):
 | 18 | Progress bar for big imports | S |
 | 19 | Confirm-by-typing for "Clear all" | S |
 | 23 | Telemetry CSV export | S |
-| 24 | LAN .213 unreachable (9+ hours) | M |
+| 24 | LAN (internal-lan) unreachable (9+ hours) | M |
 | 25 | Telemetry for tool-error retry recovery rate | S |
 | 26 | Surface retry hint visually in tool-call card | S |
 | 27 | Success-rate for rerun-with-tools | S |

@@ -64,7 +64,7 @@ Screenshot: `28_streaming_sticky_fixed_cache_e2e.png`.
 
 ## Bundle delta
 
-- MD5: `08c2c4948b3e04a04980093614f7f90a` (local & .213 match)
+- MD5: `08c2c4948b3e04a04980093614f7f90a` (local & infra-host match)
 - Size: 535 KB (negligible delta from tick-016 — same lines net)
 - gzip: 146 KB
 - Deployed via `deploy-atelier.sh` helper, single line.
@@ -77,7 +77,7 @@ Screenshot: `28_streaming_sticky_fixed_cache_e2e.png`.
 | atelier.nandai.org | 302 → PIN, 200 after auth |
 | tools.nandai.org/health | 200, n_tools=108 |
 | atelier-static.service | active |
-| LAN 10.179.1.0/24 → .213 | STILL DOWN (11th tick — chronic) |
+| LAN the internal-LAN segment (RFC-1918) → (internal-lan) | STILL DOWN (11th tick — chronic) |
 | Tailscale `infra-host` | online |
 | Cross-tab save sync (tick-014, fixed this tick) | streaming-sticky bug closed |
 | Cross-tab verdict broadcast (tick-015) | wired, protocol-verified |
@@ -98,7 +98,7 @@ From HANDOFF-016 minus #35 (now closed):
 | 18 | Progress bar for big imports | S |
 | 19 | Confirm-by-typing for "Clear all" | S |
 | 23 | Telemetry CSV export | S |
-| 24 | LAN .213 unreachable (11+ hours, chronic) | M |
+| 24 | LAN (internal-lan) unreachable (11+ hours, chronic) | M |
 | 25 | Telemetry for tool-error retry recovery rate | S |
 | 26 | Surface retry hint visually in tool-call card | S |
 | 27 | Success-rate for rerun-with-tools | S |

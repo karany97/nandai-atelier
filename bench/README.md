@@ -13,11 +13,11 @@ in with real fixtures.
 
 | Bench | Why it matters | Status | Owner |
 |---|---|---|---|
-| [BFCL v3](https://gorilla.cs.berkeley.edu/leaderboard) | Tool-call quality — the ToolACE-2-8B score everyone cites is from the paper, NOT our run. We need our own. | 📋 Harness scaffolded; needs GPU window on Titan .50 | Karan |
-| [GAIA L1 + L2](https://huggingface.co/spaces/gaia-benchmark/leaderboard) | General Assistant — does the Trinity beat single-model baselines? | 📋 Harness scaffolded | Karan |
-| [SWE-bench Verified Lite](https://www.swebench.com) | Real engineering tasks — can Trinity + Opus escape match Cursor / Cline / Aider on a public bench? | 📋 Harness scaffolded | Karan |
-| [τ²-bench (tool-use)](https://github.com/sierra-research/tau2-bench) | Multi-turn tool agent — the hardest current tool bench. Anthropic / OpenAI lead today. | 📋 Harness scaffolded | Karan |
-| Speedup (dual-3090) | Self-MoA vs single brain on real prompts | 📋 Awaiting maintenance window | Karan |
+| [BFCL v3](https://gorilla.cs.berkeley.edu/leaderboard) | Tool-call quality — the ToolACE-2-8B score everyone cites is from the paper, NOT our run. We need our own. | 📋 Harness scaffolded; needs GPU window on our dual-3090 box | TBD |
+| [GAIA L1 + L2](https://huggingface.co/spaces/gaia-benchmark/leaderboard) | General Assistant — does the Trinity beat single-model baselines? | 📋 Harness scaffolded | TBD |
+| [SWE-bench Verified Lite](https://www.swebench.com) | Real engineering tasks — can Trinity + Opus escape match Cursor / Cline / Aider on a public bench? | 📋 Harness scaffolded | TBD |
+| [τ²-bench (tool-use)](https://github.com/sierra-research/tau2-bench) | Multi-turn tool agent — the hardest current tool bench. Anthropic / OpenAI lead today. | 📋 Harness scaffolded | TBD |
+| Speedup (dual-3090) | Self-MoA vs single brain on real prompts | 📋 Awaiting maintenance window | TBD |
 
 ✅ shipped · 🚧 in flight · 📋 scaffolded · 💭 considering
 

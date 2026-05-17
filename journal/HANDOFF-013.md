@@ -85,7 +85,7 @@ local-only (`~/NandaiJarvis/scripts/deploy-atelier.sh`).
 | atelier.nandai.org | 302 → PIN, 200 after auth |
 | tools.nandai.org/health | 200, n_tools=108 |
 | atelier-static.service | active (restarted twice this tick via helper) |
-| LAN 10.179.1.0/24 → .213 | STILL DOWN |
+| LAN the internal-LAN segment (RFC-1918) → (internal-lan) | STILL DOWN |
 | Tailscale `infra-host` ((internal-tailscale)) | online |
 | New helper | `~/NandaiJarvis/scripts/deploy-atelier.sh` (executable, +x, 110 LOC) |
 | All tick-004..012 chat features | intact, untouched |
@@ -105,7 +105,7 @@ From HANDOFF-012 minus #20 (now closed):
 | 19 | Confirm-by-typing for "Clear all" | S |
 | 21 | BroadcastChannel for AuditPill refetch | S |
 | 23 | Telemetry CSV export | S |
-| 24 | LAN .213 unreachable (7+ hours) | M |
+| 24 | LAN (internal-lan) unreachable (7+ hours) | M |
 | 25 | Telemetry for tool-error retry recovery rate | S |
 | 26 | Surface retry hint visually in tool-call card | S |
 | 27 | Success-rate for rerun-with-tools | S |

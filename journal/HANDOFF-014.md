@@ -53,7 +53,7 @@ that could ricochet between tabs.
 ## End-to-end proof
 
 Method: Playwright with TWO TABS open on `atelier.nandai.org` after
-PIN-1971. Both tabs same origin = share the BroadcastChannel.
+PIN. Both tabs same origin = share the BroadcastChannel.
 
 | Step | Outcome |
 |---|---|
@@ -81,7 +81,7 @@ Lesson logged for future selectors against this app: always use
 
 ## Bundle delta
 
-- MD5: `46c8204fec9adf7d946219f5c44a61b1` (local & .213 match)
+- MD5: `46c8204fec9adf7d946219f5c44a61b1` (local & infra-host match)
 - Size: 534 KB (+2 KB over tick-012/013 — the BroadcastChannel
   init + handler + the publish call-sites)
 - gzip: 146 KB
@@ -100,7 +100,7 @@ Lesson logged for future selectors against this app: always use
 | atelier.nandai.org | 302 → PIN, 200 after auth |
 | tools.nandai.org/health | 200, n_tools=108 |
 | atelier-static.service | active (restarted via helper) |
-| LAN 10.179.1.0/24 → .213 | STILL DOWN (8th tick now) |
+| LAN the internal-LAN segment (RFC-1918) → (internal-lan) | STILL DOWN (8th tick now) |
 | Tailscale `infra-host` | online |
 | All tick-004..013 features | intact, no regression |
 | Cross-tab save sync | verified A→B |
@@ -121,7 +121,7 @@ From HANDOFF-013 minus #13 (now closed):
 | 19 | Confirm-by-typing for "Clear all" | S |
 | 21 | BroadcastChannel for AuditPill refetch (one tab pulls verdict, broadcast to others) | S |
 | 23 | Telemetry CSV export | S |
-| 24 | LAN .213 unreachable (8+ hours) | M |
+| 24 | LAN (internal-lan) unreachable (8+ hours) | M |
 | 25 | Telemetry for tool-error retry recovery rate | S |
 | 26 | Surface retry hint visually in tool-call card | S |
 | 27 | Success-rate for rerun-with-tools | S |

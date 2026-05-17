@@ -69,7 +69,7 @@ Screenshot: `29_confirm_by_typing_panel.png` (panel open with the warning text +
 
 ## Bundle delta
 
-- MD5: `11a28a89b5563fe84c1f77838d92e8c0` (local & .213 match)
+- MD5: `11a28a89b5563fe84c1f77838d92e8c0` (local & infra-host match)
 - Size: 537 KB (+2 KB over tick-017 — the inline panel, state + handlers)
 - gzip: 146 KB
 - Deployed via `deploy-atelier.sh`
@@ -82,7 +82,7 @@ Screenshot: `29_confirm_by_typing_panel.png` (panel open with the warning text +
 | atelier.nandai.org | 302 → PIN, 200 after auth |
 | tools.nandai.org/health | 200, n_tools=108 |
 | atelier-static.service | active |
-| LAN 10.179.1.0/24 → .213 | STILL DOWN (12th tick — chronic) |
+| LAN the internal-LAN segment (RFC-1918) → (internal-lan) | STILL DOWN (12th tick — chronic) |
 | Tailscale `infra-host` | online |
 | All tick-004..017 features | intact, no regression |
 
@@ -98,7 +98,7 @@ From HANDOFF-017 minus #19 (now closed):
 | 17 | Import schema-v2 migration path | S |
 | 18 | Progress bar for big imports | S |
 | 23 | Telemetry CSV export | S |
-| 24 | LAN .213 unreachable (12+ hours) | M |
+| 24 | LAN (internal-lan) unreachable (12+ hours) | M |
 | 25 | Telemetry for tool-error retry recovery rate | S |
 | 26 | Surface retry hint visually in tool-call card | S |
 | 27 | Success-rate for rerun-with-tools | S |

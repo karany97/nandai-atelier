@@ -35,7 +35,7 @@ The audit's #1 ship-blocker (HANDOFF-003 issue #3) is closed:
 
 ## End-to-end proof
 
-Method: Playwright drove the bundle on `atelier.nandai.org` after PIN-1971.
+Method: Playwright drove the bundle on `atelier.nandai.org` after the PIN gate.
 
 | Step | Outcome |
 |---|---|
@@ -74,7 +74,7 @@ at the top so the user can always start fresh.
 
 ## Bundle delta
 
-- MD5: `e4e8a26995b1b1ff231b26180f63ae56` (local & .213 match)
+- MD5: `e4e8a26995b1b1ff231b26180f63ae56` (local & infra-host match)
 - Size: 519 KB single-file (+4 KB over tick-003 — adds persist.ts + the
   store.ts plumbing)
 - gzip: 142 KB
