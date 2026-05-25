@@ -124,8 +124,8 @@ Each container persists `/home/operator/` across restarts so the AI's
 work survives reboots (browser tabs, downloaded files, ssh keys it
 generated, partial scripts it was writing).
 
-We run **atelier-os** internally at Nandai (5 sessions: Janvi /
-Devika / Aayush / Priya / shared-ops). The atelier instance for each
+We run **atelier-os** internally at Nandai (5 sessions: Alice /
+Bob / Dave / Carol / shared-ops). The atelier instance for each
 employee `iframes` their session's WebRTC stream into a right pane
 next to the chat. Multi-tenant atelier (one chat surface, many
 employees) is on the roadmap.
